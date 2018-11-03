@@ -1,6 +1,7 @@
 package it.youthclub.model;
 
 public class Recensione {
+/**NON CONFORME ALLO STANDARD , da rifare 
 	private int ID; 
 	private String Account_ID;
 	private int ID_Locale;
@@ -8,7 +9,7 @@ public class Recensione {
 	private String Titolo_recensione;
 	private int Voto;
 	private int Voto_Servizio;
-	private int Voto_qualità_prezzo;
+	private int Voto_qualit�_prezzo;
 	private int Voto_cibo;
 	public Recensione (int ID,String Account_ID,int ID_Locale,String Testo,String Titolo_recensione,int Voto,int Voto_Servizio,int Voto_qualità_prezzo,int Voto_cibo) {
 		setID(ID);
@@ -75,5 +76,6 @@ public class Recensione {
 	public void setVoto_cibo(int voto_cibo) {
 		Voto_cibo = voto_cibo;
 	}
+	*/
 	
 }

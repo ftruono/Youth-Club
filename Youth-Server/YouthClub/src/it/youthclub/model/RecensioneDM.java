@@ -14,7 +14,7 @@ public class RecensioneDM implements Recensionable{
 		try {
 			con=DriverManagerConnectionPool.getConnection();
 			String sql="INSERT INTO recensione (ID, Account_ID, ID_Locale, Testo, Titolo_recensione, Voto, Voto_Servizio, Voto_qualità_prezzo, Voto_cibo) VALUES (?,?,?,?,?,?,?,?,?)";
-			PreparedStatement prep=con.prepareStatement(sql);
+			/*PreparedStatement prep=con.prepareStatement(sql);
 			prep.setInt(1, r.getID());
 			prep.setString(2,r.getAccount_ID());
 			prep.setInt(3, r.getID_Locale());
@@ -27,6 +27,7 @@ public class RecensioneDM implements Recensionable{
 			prep.executeQuery();//To do gestire l'errore
 			con.commit();
 			prep.close();
+			*/
 			DriverManagerConnectionPool.releaseConnection(con);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -40,7 +41,7 @@ public class RecensioneDM implements Recensionable{
 	public void editRecensioneByID(int id, Recensione r) throws SQLException {
 		con=DriverManagerConnectionPool.getConnection();
 		PreparedStatement prep=con.prepareStatement("UPDATE recensione SET ID=?, Account_ID=?, ID_Locale=?, Testo=?, Titolo_recensione=?, Voto=?, Voto_Servizio=?, Voto_qualità_prezzo=?, Voto_cibo=?  WHERE (ID =?)");
-		prep.setInt(1, r.getID());
+		/*prep.setInt(1, r.getID());
 		prep.setString(2,r.getAccount_ID());
 		prep.setInt(3, r.getID_Locale());
 		prep.setString(4, r.getTesto());
@@ -52,6 +53,7 @@ public class RecensioneDM implements Recensionable{
 		prep.setInt(10, id);
 		prep.executeUpdate();
 		con.commit();
+		*/
 		prep.close();
 		DriverManagerConnectionPool.releaseConnection(con);
 		
@@ -104,7 +106,7 @@ public class RecensioneDM implements Recensionable{
 		prep=con.prepareStatement(sql);
 		ResultSet rs=prep.executeQuery();
 		while(rs.next()) {
-			vect.add(new Recensione(rs.getInt("ID"), rs.getString("Account_ID"), rs.getInt("ID_Locale"), rs.getString("Testo"), rs.getString("Titolo_recensione"), rs.getInt("Voto"), rs.getInt("Voto_Servizio"), rs.getInt("Voto_qualità_prezzo"), rs.getInt("Voto_cibo")));
+			//vect.add(new Recensione(rs.getInt("ID"), rs.getString("Account_ID"), rs.getInt("ID_Locale"), rs.getString("Testo"), rs.getString("Titolo_recensione"), rs.getInt("Voto"), rs.getInt("Voto_Servizio"), rs.getInt("Voto_qualità_prezzo"), rs.getInt("Voto_cibo")));
 		}
 		prep.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -124,7 +126,7 @@ public class RecensioneDM implements Recensionable{
 			preparedStatament.setInt(1, id);
 			ResultSet rs = preparedStatament.executeQuery();
 			while(rs.next()) {
-				rec=new Recensione(rs.getInt("ID"), rs.getString("Account_ID"), rs.getInt("ID_Locale"), rs.getString("Testo"), rs.getString("Titolo_recensione"), rs.getInt("Voto"), rs.getInt("Voto_Servizio"), rs.getInt("Voto_qualità_prezzo"), rs.getInt("Voto_cibo"));
+				//rec=new Recensione(rs.getInt("ID"), rs.getString("Account_ID"), rs.getInt("ID_Locale"), rs.getString("Testo"), rs.getString("Titolo_recensione"), rs.getInt("Voto"), rs.getInt("Voto_Servizio"), rs.getInt("Voto_qualità_prezzo"), rs.getInt("Voto_cibo"));
 			}
 			preparedStatament.close();
 			DriverManagerConnectionPool.releaseConnection(con);

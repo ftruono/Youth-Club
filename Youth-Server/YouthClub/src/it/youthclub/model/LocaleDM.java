@@ -103,7 +103,7 @@ public class LocaleDM implements Localable{
 		prep=con.prepareStatement(sql);
 		ResultSet rs=prep.executeQuery();
 		while(rs.next()) {
-			vect.add(new Locale(rs.getInt("ID"),rs.getInt("ID_Comune"), rs.getString("Nome"), rs.getString("Via"), rs.getString("Numero_telefono"), rs.getString("Sito_web"), rs.getInt("Numero_votanti"), rs.getInt("Tot_voti")));
+			//vect.add(new Locale(rs.getInt("ID"),rs.getInt("ID_Comune"), rs.getString("Nome"), rs.getString("Via"), rs.getString("Numero_telefono"), rs.getString("Sito_web"), rs.getInt("Numero_votanti"), rs.getInt("Tot_voti")));
 		}
 		prep.close();
 		DriverManagerConnectionPool.releaseConnection(con);
@@ -123,7 +123,7 @@ public class LocaleDM implements Localable{
 			preparedStatament.setInt(1, id);
 			ResultSet rs = preparedStatament.executeQuery();
 			while(rs.next()) {
-				loc=new Locale(rs.getInt("ID"),rs.getInt("ID_Comune"), rs.getString("Nome"), rs.getString("Via"), rs.getString("Numero_telefono"), rs.getString("Sito_web"), rs.getInt("Numero_votanti"), rs.getInt("Tot_voti"));
+				//loc=new Locale(rs.getInt("ID"),rs.getInt("ID_Comune"), rs.getString("Nome"), rs.getString("Via"), rs.getString("Numero_telefono"), rs.getString("Sito_web"), rs.getInt("Numero_votanti"), rs.getInt("Tot_voti"));
 			}
 			preparedStatament.close();
 			DriverManagerConnectionPool.releaseConnection(con);
