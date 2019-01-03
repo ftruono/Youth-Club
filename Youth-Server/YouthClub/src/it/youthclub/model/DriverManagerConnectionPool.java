@@ -23,7 +23,7 @@ private static List<Connection> freeDbConnections;
 			Connection newConnection = null;
 			String ip = "localhost";
 			String port = "3306";
-			String db = "youthclub";
+			String db = "youth_club";
 			String username = "root";
 			String password = "";
 

@@ -1,20 +1,21 @@
-package it.youthclub.model;
+package it.youthclub.model.users;
 
 
 
 public class Utente implements Cloneable{
-	private String idutente;
+	private String id;
+	
 	
 	public Utente(String id) {
 		setIdutente(id);
 	}
 
 	public String getIdutente() {
-		return idutente;
+		return id;
 	}
 
 	public void setIdutente(String idutente) {
-		this.idutente = idutente;
+		this.id = idutente;
 	}
 	public Utente clone() {
 		try {
