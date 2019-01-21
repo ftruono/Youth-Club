@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.youthclub.api.Geocoding;
+import it.youthclub.model.places.Place;
 import it.youthclub.model.users.UserDM;
 import it.youthclub.model.users.Utente;
 
@@ -38,15 +39,31 @@ public class Server extends HttpServlet {
 	private void elaborateSearchs(HttpServletRequest request,HttpServletResponse response) {
 		String search=request.getParameter("search");
 		String name=request.getParameter("name"); // se è presente il nome del locale
-		if(search.matches("[0-9]+")) {
-			//latintudine e longitudine
+		String category=request.getParameter("cat"); //categorie richieste
+		String mode=request.getParameter("mode"); //0:gps , 1:testo
+		Geocoding geo=null;
+		if(mode.equals("0")) {
+			String lat=search.substring(0,search.indexOf(","));
+			String lng=search.substring(search.indexOf(",")+1,search.length());
+			System.out.println(lat + " " + lng);
+			try {
+				geo=new Geocoding(Float.parseFloat(lat),Float.parseFloat(lng));
+			}catch(NumberFormatException e) {
+				
+			}
+			
 		}else {
-			Geocoding geo=new Geocoding(search);
-			geo.searchAndLearn();
+			geo=new Geocoding(search);
+			
 		}
+		Place p=geo.searchAndLearn();
+		int cat=Integer.parseInt(category);
 		
 	}
 
+	
+	
+	
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
