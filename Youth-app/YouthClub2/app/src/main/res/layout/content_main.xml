@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="167dp">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:background="@color/bianco"
+            android:text="Ricerca per nome"
+            android:id="@+id/ricerca_nome"
+            android:onClick="lanciaRicerca_Nome"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bianco"
+            android:layout_below="@+id/ricerca_nome"
+            android:text="Ricerca per località"
+            android:id="@+id/ricerca_localita"
+            android:onClick="lanciaRicerca_locale"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
