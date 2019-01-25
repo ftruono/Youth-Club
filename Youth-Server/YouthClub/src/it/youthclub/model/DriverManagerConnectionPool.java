@@ -27,9 +27,9 @@ private static List<Connection> freeDbConnections;
 			String username = "root";
 			String password = "";
 
-			newConnection = DriverManager.getConnection("jdbc:mysql://"+ ip+":"+ port+"/"+db, username, password);
-
-			newConnection.setAutoCommit(false);
+			newConnection = DriverManager.getConnection("jdbc:mysql://"+ ip+":"+ port+"/"+db +"?zeroDateTimeBehavior=convertToNull", username, password);
+           
+			newConnection.setAutoCommit(true);
 			return newConnection;
 		}
 	

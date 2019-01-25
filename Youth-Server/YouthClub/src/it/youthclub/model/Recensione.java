@@ -1,6 +1,7 @@
 package it.youthclub.model;
 
 public class Recensione {
+	
 /**NON CONFORME ALLO STANDARD , da rifare 
 	private int ID; 
 	private String Account_ID;

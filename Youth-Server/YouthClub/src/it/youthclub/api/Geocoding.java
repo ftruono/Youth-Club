@@ -9,6 +9,9 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.DateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -25,16 +28,30 @@ public class Geocoding{
 	private final static String KEY="AIzaSyDrloWpBhPQ-OZ7MyfPRhLn2kFGEbjGTMU";
 	private String url=null,luogo;
 	
+	
 	public static enum ErrorCode{
 		OK,NO_DATA,PARTIAL;
+	}
+	
+	public Geocoding(float lat,float lng) {
+		String temp_place=lat + "," + lng;
+		//https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452
+		try {
+			this.luogo=URLEncoder.encode(temp_place,java.nio.charset.StandardCharsets.UTF_16.toString());
+		} catch (UnsupportedEncodingException e) {
+			//TODO da gestire
+		}
+		
+		url="https://maps.googleapis.com/maps/api/geocode/json?latlng=" + this.luogo + "&key=" + KEY;
+		
 	}
 	
 	
 	public Geocoding(String luogo) {
 		try {
-			this.luogo=URLEncoder.encode(luogo,java.nio.charset.StandardCharsets.UTF_8.toString());
+			this.luogo=URLEncoder.encode(luogo,java.nio.charset.StandardCharsets.UTF_16.toString());
 		} catch (UnsupportedEncodingException e) {
-			
+			//TODO da gestire
 		}
 		url="https://maps.googleapis.com/maps/api/geocode/json?address=" + this.luogo + "&key=" + KEY;
 		
@@ -53,7 +70,7 @@ public class Geocoding{
 		}
 	}
 	
-	public int searchAndLearn() {
+	public Place searchAndLearn() {
 		HttpURLConnection connection = null;
 		URL uri;
 		try {
@@ -66,12 +83,13 @@ public class Geocoding{
 		    while( (single=read.readLine()) !=null) {
 		    	tot+=single;
 		    }
+		    read.close();
+			connection.disconnect();
 		   JSONObject obj=new JSONObject(tot);
-		   decodeJSON(obj);
+		   Place p=decodeJSON(obj);
+		   return p;
 		   
-		   
-		   read.close();
-		   connection.disconnect();
+		  
 		   
 		   
 		  
@@ -85,7 +103,7 @@ public class Geocoding{
 	    
 		
 		
-		return 0;
+		return null;
 	}
 	
 	private Place decodeJSON(JSONObject obj) {
@@ -109,9 +127,21 @@ public class Geocoding{
 		   lat=location.getFloat("lat");
 		   lng=location.getFloat("lng");
 		   PlaceDM pDM=new PlaceDM();
-		   p=pDM.CheckIfExist(lat, lng);
-		   if(p!=null)
-			   return p;
+		   p=pDM.CheckIfExist(lat, lng); //controlla se esiste già quel luogo
+		   Date d=new Date();
+           boolean scaduto=false;
+		   
+		   if(p!=null) {
+			   if(p.getScadenza()!=null && p.getScadenza().compareTo(d)>0) {//la situazione null non dovrebbe mai accader
+				   p.setStatus(Place.EXIST);
+				   return p;
+			   } 
+			   else
+				   scaduto=true;
+			   
+		   }
+		   
+		   
 		     for(int j=0;j<address.length();++j) {
 				   JSONObject info=address.getJSONObject(j);
 				   JSONArray types=info.getJSONArray("types");
@@ -136,10 +166,25 @@ public class Geocoding{
 			   }
 			if(better==0)
 				place=getLuogo();
+			Calendar cal = Calendar.getInstance(); 
+			cal.add(Calendar.MONTH, 1);
 			
-			p=new Place(lat,lng,place + " " + prov + " " + paese);
-			p=pDM.addPlace(p);
-			
+			if(!scaduto) {
+				p=new Place(lat,lng,place + " " + prov + " " + paese,cal.getTime());
+				p.setStatus(Place.NOTEXIST);
+				p=pDM.addPlace(p);
+			}
+				
+			else {
+				//aggiorno i nuovi dati del luogo (non strettamente necessario)
+				p.setLatitudine(lat);
+				p.setLongitudine(lng);
+				p.setName(place + " " + prov + " " + paese);
+				p.setScadenza(cal.getTime());
+				p.setStatus(Place.EXPIRED_EXIST);
+				p=pDM.editPlace(p);
+			}
+				
 			System.out.println(p.toString());
 			return p;
 		   

@@ -1,6 +1,8 @@
 package it.youthclub;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,7 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import it.youthclub.api.ApiProvider;
+import it.youthclub.api.FourSquareApi;
 import it.youthclub.api.Geocoding;
+import it.youthclub.api.GoogleApi;
+import it.youthclub.api.YelpApi;
+import it.youthclub.model.Locali.Locale;
 import it.youthclub.model.places.Place;
 import it.youthclub.model.users.UserDM;
 import it.youthclub.model.users.Utente;
@@ -41,24 +48,10 @@ public class Server extends HttpServlet {
 		String name=request.getParameter("name"); // se è presente il nome del locale
 		String category=request.getParameter("cat"); //categorie richieste
 		String mode=request.getParameter("mode"); //0:gps , 1:testo
-		Geocoding geo=null;
-		if(mode.equals("0")) {
-			String lat=search.substring(0,search.indexOf(","));
-			String lng=search.substring(search.indexOf(",")+1,search.length());
-			System.out.println(lat + " " + lng);
-			try {
-				geo=new Geocoding(Float.parseFloat(lat),Float.parseFloat(lng));
-			}catch(NumberFormatException e) {
-				
-			}
-			
-		}else {
-			geo=new Geocoding(search);
-			
-		}
-		Place p=geo.searchAndLearn();
 		int cat=Integer.parseInt(category);
-		
+		boolean md=mode.equals("0") ? false : true;
+		SearchController controller=new SearchController(search, name, cat, md);
+		controller.search();
 	}
 
 	

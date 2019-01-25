@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 
 import it.youthclub.model.DriverManagerConnectionPool;
 import it.youthclub.model.Recensione;
@@ -16,15 +17,15 @@ public class PlaceDM implements Placing {
 	public Place addPlace(Place c) {
 		try {
 			con=DriverManagerConnectionPool.getConnection();
-			String sql="INSERT INTO place (lat,lng,Name) VALUES (?,?,?)";
+			String sql="INSERT INTO place (lat,lng,Name,Scadenza) VALUES (?,?,?,?)";
 			PreparedStatement prep=con.prepareStatement(sql,PreparedStatement.RETURN_GENERATED_KEYS);
 			prep.setFloat(1, c.getLatitudine());
 			prep.setFloat(2, c.getLongitudine());
 			prep.setString(3, c.getName());
+			prep.setDate(4, convertToSQL(c.getScadenza()));
 			prep.executeUpdate();
 			ResultSet set=prep.getGeneratedKeys();
 			set.next();
-			con.commit();
 			c.setID(set.getInt(1));			
 			prep.close();
 			
@@ -62,7 +63,7 @@ public class PlaceDM implements Placing {
 			preparedStatament.setFloat(4, max_lng);
 			ResultSet rs = preparedStatament.executeQuery();
 		   if(rs.next())
-			   p=new Place(rs.getInt("ID"),rs.getFloat("lat"),rs.getFloat("lng"),rs.getString("Name"));
+			   p=new Place(rs.getInt("ID"),rs.getFloat("lat"),rs.getFloat("lng"),rs.getString("Name"),rs.getDate("Scadenza"));
 		   
 			preparedStatament.close();
 			DriverManagerConnectionPool.releaseConnection(con);
@@ -72,5 +73,32 @@ public class PlaceDM implements Placing {
 		
 		return p;
 	}
+
+	@Override
+	public Place editPlace(Place edit) {
+		try {
+			con=DriverManagerConnectionPool.getConnection();
+			String sql="UPDATE place SET lat=?,lng=?,Name=?,Scadenza=? WHERE(ID=?)";
+			PreparedStatement prep=con.prepareStatement(sql);
+			prep.setFloat(1, edit.getLatitudine());
+			prep.setFloat(2, edit.getLongitudine());
+			prep.setString(3, edit.getName());
+			prep.setDate(4,convertToSQL(edit.getScadenza()));
+			prep.setInt(5, edit.getID());
+			prep.executeUpdate();		
+			prep.close();
+			return edit;
+		} catch (SQLException e) {
+			
+		}
+		return null;
+	}
+	
+	
+	private java.sql.Date convertToSQL(Date uDate) {
+		java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+		return sDate;
+		
+   }
 
 }
