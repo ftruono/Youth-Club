@@ -2,10 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.nello.youthclub">
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <uses-feature android:name="android.hardware.location.gps" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
@@ -23,10 +25,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service
-            android:name=".FetchAddressIntentService"
-            android:exported="false" />
-
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -39,11 +37,11 @@
         </activity>
         <activity android:name=".Ricerca_localita" />
         <activity android:name=".Ricerca_nome" />
+        <activity android:name=".Recensione" />
         <activity android:name=".Mappa_lista" />
         <activity android:name=".profile" />
         <activity android:name=".Locale" />
-        <activity android:name=".Recensione" />
-        <activity android:name=".InfoLocale"></activity>
+        <activity android:name=".InfoLocale" />
     </application>
 
 </manifest>

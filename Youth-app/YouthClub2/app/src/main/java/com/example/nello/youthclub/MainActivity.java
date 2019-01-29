@@ -1,7 +1,12 @@
 package com.example.nello.youthclub;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,14 +20,13 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
+    private String imei;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -58,16 +62,26 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            Toast.makeText(getApplicationContext(),"action settings",Toast.LENGTH_SHORT).show();
-        }
+            // ClientRequest clientRequest=new ClientRequest();
+            // clientRequest.autenticator("0");
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        0);
+                //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
+            }
 
+            imei=telephonyManager.getDeviceId();
+            Toast.makeText(getApplicationContext(),"imei"+imei,Toast.LENGTH_SHORT).show();
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -75,12 +89,12 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.my_profile) {
             Intent i = new Intent(getApplicationContext(), profile.class);
+            i.putExtra("imei",imei);
             startActivity(i);
         } else if (id == R.id.my_review) {
             //Intent i = new Intent(getApplicationContext(), Recensioni.class);
             //startActivity(i);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -88,10 +102,12 @@ public class MainActivity extends AppCompatActivity
 
     public void lanciaRicerca_locale(View v) {
         Intent i = new Intent(getApplicationContext(), Ricerca_localita.class);
+        i.putExtra("imei",imei);
         startActivity(i);
     }
     public void lanciaRicerca_Nome(View v) {
         Intent i = new Intent(getApplicationContext(), Ricerca_nome.class);
+        i.putExtra("imei",imei);
         startActivity(i);
     }
 }

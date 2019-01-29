@@ -32,6 +32,10 @@ public class Ricerca_nome extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
                 i.putExtra("nome_locale", editText.getText().toString());
                 i.putExtra("tipi",pulsanti);
+                Bundle extras=getIntent().getExtras();
+                if(extras!=null){
+                    i.putExtra("imei",extras.getString("imei"));
+                }
                 startActivity(i);
             }
         });

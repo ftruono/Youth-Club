@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 import static android.location.LocationManager.*;
 
@@ -55,6 +56,10 @@ public class Ricerca_localita extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
                 i.putExtra("nome_locale", editText.getText().toString());
                 i.putExtra("tipi", pulsanti);
+                Bundle extras=getIntent().getExtras();
+                if(extras!=null){
+                    i.putExtra("imei",extras.getString("imei"));
+                }
                 startActivity(i);
             }
         });
@@ -88,12 +93,46 @@ public class Ricerca_localita extends AppCompatActivity {
 
     @SuppressLint("MissingPermission")
     public void gpsposition(View view) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+            //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
+            return;
+
+
+        }
+        LocationManager locationManager = null;
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.d("GPS_Y", String.valueOf(location.getLatitude()));
+                Log.d("GPS_Y", String.valueOf(location.getLongitude()));
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+
+            }
+        });
 
     }
-
-
-
-
-
 }
+
+
+
+
+
+
 
