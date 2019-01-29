@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Date;
 
 import it.youthclub.model.DriverManagerConnectionPool;
-import it.youthclub.model.Recensione;
 
 public class PlaceDM implements Placing {
 

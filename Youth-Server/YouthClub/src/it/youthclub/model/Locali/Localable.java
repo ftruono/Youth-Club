@@ -8,7 +8,7 @@ import it.youthclub.model.places.Place;
 public interface Localable {
 	public void addAllLocale(List<Locale> l);
 	public List<Locale> getLocale(Place p,int category);
-	public void updateLocale(Locale l,Place p);
+	public void updateLocale(List<Locale> l);
 
 }
 

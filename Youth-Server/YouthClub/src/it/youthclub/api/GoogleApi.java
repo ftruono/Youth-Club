@@ -72,7 +72,8 @@ public class GoogleApi extends ApiProvider {
 		    read.close();
 			connection.disconnect();
 			JSONObject obj=new JSONObject(tot);
-			List<Locale> temp=decodeJSON(obj);
+			int id_p=p.getID();
+			List<Locale> temp=decodeJSON(obj,id_p);
 			if(temp!=null)
 			 finalList.addAll(temp);
 			//System.out.println("len :" + finalList.size() + " query=" + query);
@@ -90,7 +91,7 @@ public class GoogleApi extends ApiProvider {
 	
 	
 	
-	private List<Locale> decodeJSON(JSONObject obj){
+	private List<Locale> decodeJSON(JSONObject obj,int idplace){
 		try {
 			List<Locale> loc=new LinkedList<>(); 
 			JSONArray results=obj.getJSONArray("results");
@@ -98,7 +99,9 @@ public class GoogleApi extends ApiProvider {
 				JSONObject locale=results.getJSONObject(i);
 				String[] myCat=getMyCategoriesFromApi(locale.getJSONArray("types"));
 				if(myCat.length>0) {
-					Locale l=new Locale();
+					Locale l=new Locale("google");
+					l.setPlaceID(idplace);
+					l.setIdApi(locale.getString("id"));
 					l.setVia(locale.getString("formatted_address"));
 					l.setNome(locale.getString("name"));
 					l.setCategory(Categoria.getValueFromCategoriesNames(myCat));

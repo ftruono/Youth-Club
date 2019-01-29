@@ -8,16 +8,26 @@ import it.youthclub.api.FourSquareApi;
 import it.youthclub.api.GoogleApi;
 import it.youthclub.api.YelpApi;
 import it.youthclub.model.Locali.Locale;
+import it.youthclub.model.Locali.LocaleDM;
 import it.youthclub.model.places.Place;
 
 public class ParallelingSearch implements onUpdateTask{
 
 	
-	private ArrayList<Locale>lst=new ArrayList<>();
-	private int status;
+	private ArrayList<Locale>lst;
+	private Place p;
+	private LocaleDM lm;
+	private int category;
 	
-	public void search(Place p,int category) {
-		int status=p.getStatus();
+	public ParallelingSearch() {
+		lm=new LocaleDM();
+		lst=new ArrayList<>();
+	}
+	public List<Locale> search(Place p,int category) {
+		this.p=p;
+		this.category=category;
+		lst.clear();
+		int status=p.getStatus();	
 		if(status==Place.NOTEXIST || status==Place.EXPIRED_EXIST) {
          	TaskSearch t1=new TaskSearch(p, category, new GoogleApi(), this);		
 			TaskSearch t2=new TaskSearch(p,category,new YelpApi(),this);
@@ -33,12 +43,13 @@ public class ParallelingSearch implements onUpdateTask{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-            doUpdate();
+            return doUpdate();
             
-            //aggiorna i dati del database
+            
             
 		}else {
-			//leggi dal db
+		    return lm.getLocale(p, category);
+		     
 		}
 		
 		
@@ -47,19 +58,17 @@ public class ParallelingSearch implements onUpdateTask{
 	@Override
 	public void update(List<Locale> l) {
 		lst.addAll(l);
-		System.out.println("lst:" + lst.size());
 	}
 	
-	private void doUpdate() {
+	private List<Locale> doUpdate() {
 		System.out.println("Sono finiti i 3thread");
-		/*if(status==Place.NOTEXIST)
-		//TODO : inserisci i locali
-	else
-		//TODO : aggiorna i locali
-		 * 
-		 */
-	
-	//recupera la lista corretta
+		if(p.getStatus()==Place.NOTEXIST)
+			lm.addAllLocale(lst);	
+		else  //PLACE.EXPIRED_EXIST
+			lm.updateLocale(lst);
+		
+		return lm.getLocale(p, category);
+		
 	}
 	
 }

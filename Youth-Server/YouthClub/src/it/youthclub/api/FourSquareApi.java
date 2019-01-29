@@ -56,8 +56,9 @@ public class FourSquareApi extends ApiProvider {
 		    }
 		    read.close();
 			connection.disconnect();
+			int id_p=p.getID();
 		    JSONObject obj=new JSONObject(tot);
-		    return decodeJSON(obj);
+		    return decodeJSON(obj,id_p);
 		}catch(IOException e) {
 			e.printStackTrace();
 			
@@ -66,7 +67,7 @@ public class FourSquareApi extends ApiProvider {
 	}
 
 	
-	private List<Locale> decodeJSON(JSONObject obj){
+	private List<Locale> decodeJSON(JSONObject obj,int idplace){
 		JSONObject response=obj.getJSONObject("response");
 		ArrayList<Locale> lista=new ArrayList<Locale>();
 		JSONArray venues=response.getJSONArray("venues");
@@ -75,7 +76,9 @@ public class FourSquareApi extends ApiProvider {
 				JSONObject locale=venues.getJSONObject(i);
 				String cat[]=getMyCategoriesFromApi(locale.getJSONArray("categories"));
 				if(cat.length>0) {
-					Locale l=new Locale();
+					Locale l=new Locale("four");
+					l.setIdApi(locale.getString("id"));
+					l.setPlaceID(idplace);
 					l.setCategory(Categoria.getValueFromCategoriesNames(cat));
 					l.setNome(locale.getString("name"));
 					JSONObject location=locale.getJSONObject("location");

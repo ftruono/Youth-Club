@@ -1,39 +1,77 @@
 package it.youthclub.model.Locali;
 
+import java.util.ArrayList;
+import java.util.List;
+import it.youthclub.model.Recensioni.Recensione;
+
 public class Locale {
 	private int id;	
 	private int idPlace;
 	private String nome;
 	private String via;
 	private String numeroCellulare;
-	private String sitoWeb;
 	private int numVotanti;
 	private int totVoti;
 	private float lat,lng;
 	private int category;
+	private String fonte;
+	private List<Recensione> recensioni;
+	private String id_api;
 	
-	public Locale() {
-		sitoWeb="";
+	public Locale(String fonte) {
+		
 		numVotanti=0;
 		totVoti=0;
 		numeroCellulare="";
+		this.fonte=fonte;
+		recensioni=new ArrayList<>();
 		
 	}
 	
-	public Locale(int ID,int IDPlace,String Nome,String Via,String telefono
-			,String web,int nVoti ,int Tot_voti,float lat,float lng,int cat) {
-		setID(ID);
-		setPlaceID(IDPlace);
-		setNome(Nome);
-		setPhone(telefono);
-		setNumeroVotanti(nVoti);
-		setWebSite(web);
-		setTotVoti(Tot_voti);
-		setVia(Via);
-		this.setLatitudine(lat);
-		this.setLongitudine(lng);
-		this.setCategory(cat);
+	
+	
+	
+	public Locale(int id, int idPlace, String nome, String via, String numeroCellulare, int numVotanti,
+			int totVoti, float lat, float lng, int category, String fonte, String id_api) {
+		
+		this.id=id;
+		this.idPlace = idPlace;
+		this.nome = nome;
+		this.via = via;
+		this.numeroCellulare = numeroCellulare;
+		this.numVotanti = numVotanti;
+		this.totVoti = totVoti;
+		this.lat = lat;
+		this.lng = lng;
+		this.category = category;
+		this.fonte = fonte;
+		this.recensioni = new ArrayList<>();
+		this.id_api = id_api;
 	}
+
+	public boolean addReview(Recensione s) {
+		return recensioni.add(s);
+	}
+	
+	public String getFonte() {
+		return fonte;
+	}
+
+	public void setFonte(String fonte) {
+		this.fonte = fonte;
+	}
+
+	public String getIdApi() {
+		return id_api;
+	}
+
+	public void setIdApi(String id_api) {
+		this.id_api = id_api;
+	}
+
+	
+	
+	
 	public int getID() {
 		return id;
 	}
@@ -61,12 +99,7 @@ public class Locale {
 	public void setPhone(String telefono) {
 		numeroCellulare = telefono;
 	}
-	public String getWebSite() {
-		return sitoWeb;
-	}
-	public void setWebSite(String web) {
-		sitoWeb = web;
-	}
+	
 	public int getNumeroVotanti() {
 		return numVotanti;
 	}
@@ -104,6 +137,20 @@ public class Locale {
 	public void setCategory(int category) {
 		this.category = category;
 	}
+
+	public List<Recensione> getRecensioni() {
+		return recensioni;
+	}
+
+
+
+
+	public void setRecensioni(List<Recensione> recensioni) {
+		this.recensioni = recensioni;
+	}
+
+
+
 
 	@Override
 	public int hashCode() {

@@ -60,8 +60,9 @@ public class YelpApi extends ApiProvider {
 		    }
 		    read.close();
 			connection.disconnect();
+			int id_p=p.getID();
 			JSONObject obj=new JSONObject(tot);
-			return decodeJSON(obj);
+			return decodeJSON(obj,id_p);
 		}catch(IOException ex) {
 			ex.printStackTrace();
 		}
@@ -70,7 +71,7 @@ public class YelpApi extends ApiProvider {
 
 	
 	
-	private List<Locale> decodeJSON(JSONObject obj){
+	private List<Locale> decodeJSON(JSONObject obj,int idplace){
 		JSONArray businesses=obj.getJSONArray("businesses");
 		List<Locale> lst=new ArrayList<Locale>();
 		for(int i=0;i<businesses.length();++i) {
@@ -78,7 +79,9 @@ public class YelpApi extends ApiProvider {
 				JSONObject locale=businesses.getJSONObject(i);
 				String myCat[]=getMyCategoriesFromApi(locale.getJSONArray("categories"));
 				if(myCat.length>0) {
-					Locale l=new Locale();
+					Locale l=new Locale("yelp");
+					l.setIdApi(locale.getString("id"));
+					l.setPlaceID(idplace);
 					l.setCategory(Categoria.getValueFromCategoriesNames(myCat));
 					l.setNome(locale.getString("name"));
 					JSONObject coord=locale.getJSONObject("coordinates");

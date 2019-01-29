@@ -23,7 +23,7 @@ import it.youthclub.model.places.Place;
 import it.youthclub.model.places.PlaceDM;
 
 
-
+//DA aggiungere le runtimeException
 public class Geocoding{
 	private final static String KEY="AIzaSyDrloWpBhPQ-OZ7MyfPRhLn2kFGEbjGTMU";
 	private String url=null,luogo;
@@ -37,7 +37,7 @@ public class Geocoding{
 		String temp_place=lat + "," + lng;
 		//https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452
 		try {
-			this.luogo=URLEncoder.encode(temp_place,java.nio.charset.StandardCharsets.UTF_16.toString());
+			this.luogo=URLEncoder.encode(temp_place,java.nio.charset.StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
 			//TODO da gestire
 		}
@@ -49,7 +49,7 @@ public class Geocoding{
 	
 	public Geocoding(String luogo) {
 		try {
-			this.luogo=URLEncoder.encode(luogo,java.nio.charset.StandardCharsets.UTF_16.toString());
+			this.luogo=URLEncoder.encode(luogo,java.nio.charset.StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
 			//TODO da gestire
 		}
@@ -61,14 +61,7 @@ public class Geocoding{
 		return luogo;
 	}
 
-	public void setLuogo(String luogo) {
-		try {
-			this.luogo =URLEncoder.encode(luogo,java.nio.charset.StandardCharsets.UTF_8.toString());
-		} catch (UnsupportedEncodingException e) {
-			
-			e.printStackTrace();
-		}
-	}
+	
 	
 	public Place searchAndLearn() {
 		HttpURLConnection connection = null;

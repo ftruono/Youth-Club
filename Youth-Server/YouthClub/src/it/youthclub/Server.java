@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONObject;
+
 import it.youthclub.api.ApiProvider;
 import it.youthclub.api.FourSquareApi;
 import it.youthclub.api.Geocoding;
@@ -40,6 +42,7 @@ public class Server extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		elaborateSearchs(request, response);
+		
 	}
 	
 	
@@ -48,10 +51,30 @@ public class Server extends HttpServlet {
 		String name=request.getParameter("name"); // se è presente il nome del locale
 		String category=request.getParameter("cat"); //categorie richieste
 		String mode=request.getParameter("mode"); //0:gps , 1:testo
-		int cat=Integer.parseInt(category);
-		boolean md=mode.equals("0") ? false : true;
-		SearchController controller=new SearchController(search, name, cat, md);
-		controller.search();
+		int cat=-1;
+		boolean md=true;
+		if (category!=null)
+			cat=Integer.parseInt(category);
+		if(mode!=null)
+			md=mode.equals("0") ? false : true;
+		
+		SearchController controller;
+		if(name==null)
+			controller=new SearchController(search, cat, md);
+		else
+			controller=new SearchController(name);
+		
+		JSONObject json=controller.search();
+		response.setContentType("application/json");
+		try {
+			response.getWriter().println(json);
+			response.getWriter().flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	
@@ -61,9 +84,11 @@ public class Server extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    
+	    //le richieste post sono recensioni!
        
 		
 	}
+	
+	
 
 }

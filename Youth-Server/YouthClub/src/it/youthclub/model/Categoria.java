@@ -9,7 +9,7 @@ public final class Categoria {
   public final static String ENOTECA="enoteca";
   public final static String DISCO="disco";
   public final static String PUB="pub";
-	
+  	
 	
   public  enum types{
 	  BAR(1),
@@ -75,6 +75,35 @@ public final class Categoria {
 		    String rt[]=new String[list.size()];
 		    return list.toArray(rt);	  
 	  }
+	  
+  }
+  
+  public static Integer[] getSingleCategoriesFromValue(int value) {
+	  if (value>15)
+		  return new Integer[] {types.UNDEFINED.getValue()};
+	  else {
+		  ArrayList<Integer> list=new ArrayList<>();
+		  if(value>=types.ENOTECA.getValue()) {
+			  value-=types.ENOTECA.getValue();
+		      list.add(types.ENOTECA.getValue());
+		  }
+		  if(value>=types.DISCO.getValue()) {
+			  value-=types.DISCO.getValue();
+			  list.add(types.DISCO.getValue());
+		  }
+		  if(value>=types.PUB.getValue()) {
+			  value-=types.PUB.getValue();
+			  list.add(types.PUB.getValue());
+		  }
+		  if(value>=types.BAR.getValue()) {
+			  value-=types.BAR.getValue();
+			  list.add(types.BAR.getValue());
+		  }
+		  Integer rt[]=new Integer[list.size()];
+		  return list.toArray(rt);
+		  
+	  }
+	  
 	  
   }
   
