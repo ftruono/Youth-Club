@@ -2,7 +2,7 @@ package it.youthclub;
 import java.util.List;
 
 import it.youthclub.api.ApiProvider;
-import it.youthclub.model.Locali.Locale;
+import it.youthclub.model.locali.Locale;
 import it.youthclub.model.places.Place;
 public class TaskSearch extends Thread {
    

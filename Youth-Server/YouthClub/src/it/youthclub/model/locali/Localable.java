@@ -1,4 +1,4 @@
-package it.youthclub.model.Locali;
+package it.youthclub.model.locali;
 
 
 import java.util.List;

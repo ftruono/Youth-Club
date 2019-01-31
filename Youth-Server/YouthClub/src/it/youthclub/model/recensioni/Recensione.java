@@ -1,4 +1,4 @@
-package it.youthclub.model.Recensioni;
+package it.youthclub.model.recensioni;
 
 
 

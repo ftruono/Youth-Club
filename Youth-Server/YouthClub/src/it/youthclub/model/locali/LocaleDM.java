@@ -1,4 +1,4 @@
-package it.youthclub.model.Locali;
+package it.youthclub.model.locali;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import it.youthclub.model.Categoria;
 import it.youthclub.model.DriverManagerConnectionPool;
-import it.youthclub.model.Recensioni.Recensione;
-import it.youthclub.model.Recensioni.RecensioneDM;
 import it.youthclub.model.places.Place;
+import it.youthclub.model.recensioni.Recensione;
+import it.youthclub.model.recensioni.RecensioneDM;
 
 public class LocaleDM implements Localable{
 

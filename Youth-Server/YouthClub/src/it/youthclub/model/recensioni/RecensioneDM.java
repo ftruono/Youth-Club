@@ -1,4 +1,4 @@
-package it.youthclub.model.Recensioni;
+package it.youthclub.model.recensioni;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

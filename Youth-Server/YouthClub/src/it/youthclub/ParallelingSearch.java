@@ -7,8 +7,8 @@ import it.youthclub.TaskSearch.onUpdateTask;
 import it.youthclub.api.FourSquareApi;
 import it.youthclub.api.GoogleApi;
 import it.youthclub.api.YelpApi;
-import it.youthclub.model.Locali.Locale;
-import it.youthclub.model.Locali.LocaleDM;
+import it.youthclub.model.locali.Locale;
+import it.youthclub.model.locali.LocaleDM;
 import it.youthclub.model.places.Place;
 
 public class ParallelingSearch implements onUpdateTask{

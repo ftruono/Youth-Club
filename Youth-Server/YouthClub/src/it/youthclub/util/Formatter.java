@@ -4,8 +4,9 @@ package it.youthclub.util;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import it.youthclub.model.Locali.Locale;
-import it.youthclub.model.Recensioni.Recensione;
+
+import it.youthclub.model.locali.Locale;
+import it.youthclub.model.recensioni.Recensione;
 
 public class Formatter {
   

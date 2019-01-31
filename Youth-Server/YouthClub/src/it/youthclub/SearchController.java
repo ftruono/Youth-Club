@@ -7,7 +7,7 @@ import org.json.JSONObject;
 
 import it.youthclub.api.GeoException;
 import it.youthclub.api.Geocoding;
-import it.youthclub.model.Locali.Locale;
+import it.youthclub.model.locali.Locale;
 import it.youthclub.model.places.Place;
 import it.youthclub.util.Formatter;
 

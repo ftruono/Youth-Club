@@ -16,7 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import it.youthclub.model.Categoria;
-import it.youthclub.model.Locali.Locale;
+import it.youthclub.model.locali.Locale;
 import it.youthclub.model.places.Place;
 
 public class YelpApi extends ApiProvider {

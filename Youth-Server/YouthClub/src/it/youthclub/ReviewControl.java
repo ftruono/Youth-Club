@@ -1,7 +1,7 @@
 package it.youthclub;
 
-import it.youthclub.model.Recensioni.Recensione;
-import it.youthclub.model.Recensioni.RecensioneDM;
+import it.youthclub.model.recensioni.Recensione;
+import it.youthclub.model.recensioni.RecensioneDM;
 
 public class ReviewControl {
 

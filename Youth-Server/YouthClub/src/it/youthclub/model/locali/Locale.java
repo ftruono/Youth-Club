@@ -1,8 +1,9 @@
-package it.youthclub.model.Locali;
+package it.youthclub.model.locali;
 
 import java.util.ArrayList;
 import java.util.List;
-import it.youthclub.model.Recensioni.Recensione;
+
+import it.youthclub.model.recensioni.Recensione;
 
 public class Locale {
 	private int id;	
