@@ -2,10 +2,10 @@ package it.youthclub;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import org.json.JSONObject;
 
+import it.youthclub.api.GeoException;
 import it.youthclub.api.Geocoding;
 import it.youthclub.model.Locali.Locale;
 import it.youthclub.model.places.Place;
@@ -29,6 +29,7 @@ public class SearchController {
 	
 	public SearchController(String name) {
 	   mode=true;
+	   category=0;
 	   try {
 		   this.name=name.substring(0, name.indexOf(",")).toLowerCase();
 		   search=name.substring(name.indexOf(",")+1,name.length());
@@ -39,8 +40,9 @@ public class SearchController {
 	
 	/**
 	 * Esegue la ricerca e formatta i dati.
+	 * @throws GeoException 
 	 */
-	public JSONObject search() {
+	public JSONObject search() throws GeoException {
 		Geocoding geo=null;
 		if(!mode) {
 			String lat=search.substring(0,search.indexOf(","));

@@ -1,8 +1,10 @@
 package it.youthclub.model.Recensioni;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public interface Recensionable {
-	public void createRecensione(Recensione r);
-
+	public void addRecensione(Recensione r);
+	public void editRecensioneByID(Recensione r);
+	public ArrayList<Recensione> getAllRecensione(int idLoc) throws SQLException;
 }

@@ -1,13 +1,10 @@
 package it.youthclub.api;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.HashSet;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
+
 
 public abstract class ApiProvider implements Provider {
 

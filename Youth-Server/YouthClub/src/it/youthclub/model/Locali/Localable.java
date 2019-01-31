@@ -1,6 +1,6 @@
 package it.youthclub.model.Locali;
 
-import java.sql.SQLException;
+
 import java.util.List;
 
 import it.youthclub.model.places.Place;

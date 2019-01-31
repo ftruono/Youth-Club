@@ -5,15 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,9 +24,7 @@ public class Geocoding{
 	private String url=null,luogo;
 	
 	
-	public static enum ErrorCode{
-		OK,NO_DATA,PARTIAL;
-	}
+	
 	
 	public Geocoding(float lat,float lng) {
 		String temp_place=lat + "," + lng;
@@ -63,7 +56,7 @@ public class Geocoding{
 
 	
 	
-	public Place searchAndLearn() {
+	public Place searchAndLearn() throws GeoException {
 		HttpURLConnection connection = null;
 		URL uri;
 		try {
@@ -99,18 +92,18 @@ public class Geocoding{
 		return null;
 	}
 	
-	private Place decodeJSON(JSONObject obj) {
+	private Place decodeJSON(JSONObject obj) throws GeoException {
 		
 		float lat,lng;
 		String place=null,paese=null,prov=null;
 		int better=0; //indica la precisione
 		Place p;
 		if(!obj.getString("status").contains("OK")) {
-			   return null;
+			   throw new GeoException("Impossibile decodificare il luogo");
 		   }
 		   try {
 		   if(obj.getString("partial_match")!="") 
-			  return null;
+			  throw new GeoException("Risultato parziale , si prega di essere più precisi");
 		   }catch(JSONException e) {
 			  
 		   }		   

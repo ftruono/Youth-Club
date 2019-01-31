@@ -1,12 +1,9 @@
 package it.youthclub.util;
 
-import java.util.ArrayList;
+
 import java.util.List;
-
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import it.youthclub.model.Locali.Locale;
 import it.youthclub.model.Recensioni.Recensione;
 
@@ -17,6 +14,9 @@ public class Formatter {
    public Formatter(List<Locale> lst) {
 	   this.lst=lst;
    }
+   
+   
+   
    
    public JSONObject getJSON() {
 	   JSONObject objF=new JSONObject();

@@ -1,5 +1,7 @@
 package it.youthclub.model.Recensioni;
 
+
+
 public class Recensione {
 	
 	private int id; 
@@ -13,7 +15,7 @@ public class Recensione {
 	private int votoCibo;
 	
 	public Recensione() {
-		
+	    
 	}
 	 
 	public Recensione(int id, String accountID, int localeID, String testo, String titoloRecensione, float voto,
@@ -29,6 +31,30 @@ public class Recensione {
 		this.votoQP = votoQP;
 		this.votoCibo = votoCibo;
 	}
+	
+	public Recensione(int id,String testo,String titolo,int votoServizio,int votoQP,int votoCibo) {
+		this.id=id;
+		this.testo=testo;
+		this.titoloRecensione=titolo;
+		this.votoServizio=votoServizio;
+		this.votoQP=votoQP;
+		this.votoCibo=votoCibo;
+		this.voto=(votoServizio+votoQP+votoCibo)/3.0f;
+		
+		
+	}
+	
+	public Recensione(String account,int idL,String testo,String titolo,int votoServizio,int votoQP,int votoCibo) {
+		this.accountID=account;
+		this.localeID=idL;
+		this.testo=testo;
+		this.titoloRecensione=titolo;
+		this.votoServizio=votoServizio;
+		this.votoQP=votoQP;
+		this.votoCibo=votoCibo;
+		this.voto=(votoServizio+votoQP+votoCibo)/3.0f;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -60,11 +86,9 @@ public class Recensione {
 		this.titoloRecensione = titoloRecensione;
 	}
 	public float getVoto() {
-		return voto;
+		return (float)Math.ceil(voto);
 	}
-	public void setVoto(float voto) {
-		this.voto = voto;
-	}
+	
 	public int getVotoServizio() {
 		return votoServizio;
 	}

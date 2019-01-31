@@ -6,13 +6,12 @@ import it.youthclub.model.Locali.Locale;
 import it.youthclub.model.places.Place;
 public class TaskSearch extends Thread {
    
-    private int cat;
     private Place p;
 	private ApiProvider provider;
 	private onUpdateTask t;
-	public TaskSearch(Place p,int category,ApiProvider api,onUpdateTask t) {
+	public TaskSearch(Place p,ApiProvider api,onUpdateTask t) {
 		this.p=p.clone();
-		this.cat=category;
+		
 		this.provider=api;
 		this.t=t;
 	}

@@ -29,9 +29,9 @@ public class ParallelingSearch implements onUpdateTask{
 		lst.clear();
 		int status=p.getStatus();	
 		if(status==Place.NOTEXIST || status==Place.EXPIRED_EXIST) {
-         	TaskSearch t1=new TaskSearch(p, category, new GoogleApi(), this);		
-			TaskSearch t2=new TaskSearch(p,category,new YelpApi(),this);
-			TaskSearch t3=new TaskSearch(p,category,new FourSquareApi(),this);
+         	TaskSearch t1=new TaskSearch(p, new GoogleApi(), this);		
+			TaskSearch t2=new TaskSearch(p,new YelpApi(),this);
+			TaskSearch t3=new TaskSearch(p,new FourSquareApi(),this);
             t1.run();
             t2.run();
             t3.run();
