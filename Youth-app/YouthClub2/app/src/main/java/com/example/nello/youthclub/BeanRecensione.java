@@ -1,6 +1,8 @@
 package com.example.nello.youthclub;
 
-public class BeanRecensione {
+import java.io.Serializable;
+
+public class BeanRecensione implements Serializable {
 
     private int id;
     private String accountID;

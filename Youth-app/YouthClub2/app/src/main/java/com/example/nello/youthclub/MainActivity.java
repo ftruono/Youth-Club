@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
@@ -34,6 +35,17 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    0);
+            //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
+        }
+
+        imei=telephonyManager.getDeviceId();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -66,17 +78,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             // ClientRequest clientRequest=new ClientRequest();
             // clientRequest.autenticator("0");
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_PHONE_STATE},
-                        0);
-                //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
-            }
-
-            imei=telephonyManager.getDeviceId();
-            Toast.makeText(getApplicationContext(),"imei"+imei,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),"setting",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -92,8 +94,9 @@ public class MainActivity extends AppCompatActivity
             i.putExtra("imei",imei);
             startActivity(i);
         } else if (id == R.id.my_review) {
-            //Intent i = new Intent(getApplicationContext(), Recensioni.class);
-            //startActivity(i);
+            Intent i = new Intent(getApplicationContext(), MyReview.class);
+            i.putExtra("imei",imei);
+            startActivity(i);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

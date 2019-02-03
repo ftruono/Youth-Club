@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Recensione">
+    android:layout_height="match_parent">
 
 
     <RatingBar
@@ -26,16 +25,18 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="70dp"
-        android:hint="titolo recensione" />
+        android:hint="Titolo recensione"
+        android:textStyle="bold"
+        android:textSize="20dp"/>
+
 
     <TextView
         android:id="@+id/testo_recensione"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/titolo_recensione"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="111dp"
+        android:layout_marginTop="20dp"
         android:hint="testo recensione" />
 
 
@@ -44,8 +45,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ratingBar"
-        android:layout_marginLeft="64dp"
+        android:layout_marginLeft="107dp"
         android:layout_toRightOf="@+id/titolo_recensione"
-        android:text="Modifica recensione"
-        tools:ignore="NotSibling,UnknownId" />
+        android:text="Modifica recensione" />
 </RelativeLayout>

@@ -26,19 +26,7 @@ public class Ricerca_nome extends AppCompatActivity {
         cb4 = findViewById(R.id.discoteche);
         cerca = findViewById(R.id.img_search);
 
-        cerca.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
-                i.putExtra("nome_locale", editText.getText().toString());
-                i.putExtra("tipi",pulsanti);
-                Bundle extras=getIntent().getExtras();
-                if(extras!=null){
-                    i.putExtra("imei",extras.getString("imei"));
-                }
-                startActivity(i);
-            }
-        });
+
         cb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +49,26 @@ public class Ricerca_nome extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pulsanti[3]="discoteca";
+            }
+        });
+
+
+        cerca.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editText.getText().toString().indexOf(",")<0){
+                    Toast.makeText(v.getContext(), "Si prega di inserire la città dopo il nome del locale separati da una virgola", Toast.LENGTH_SHORT).show();
+                }else {
+                    Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
+                    i.putExtra("nome_locale", editText.getText().toString());
+                    i.putExtra("tipi",pulsanti);
+                    i.putExtra("mod",2);
+                    Bundle extras=getIntent().getExtras();
+                    if(extras!=null){
+                        i.putExtra("imei",extras.getString("imei"));
+                    }
+                    startActivity(i);
+                }
             }
         });
     }

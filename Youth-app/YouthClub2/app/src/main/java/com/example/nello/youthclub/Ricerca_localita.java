@@ -56,9 +56,10 @@ public class Ricerca_localita extends AppCompatActivity {
                 Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
                 i.putExtra("nome_locale", editText.getText().toString());
                 i.putExtra("tipi", pulsanti);
-                Bundle extras=getIntent().getExtras();
-                if(extras!=null){
-                    i.putExtra("imei",extras.getString("imei"));
+                i.putExtra("mod",0);
+                Bundle exstras=getIntent().getExtras();
+                if(exstras!=null){
+                    i.putExtra("imei",exstras.getString("imei"));
                 }
                 startActivity(i);
             }
@@ -92,7 +93,7 @@ public class Ricerca_localita extends AppCompatActivity {
 
 
     @SuppressLint("MissingPermission")
-    public void gpsposition(View view) {
+    public void gpsposition(final View view) {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             ActivityCompat.requestPermissions(this,
@@ -109,6 +110,7 @@ public class Ricerca_localita extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 Log.d("GPS_Y", String.valueOf(location.getLatitude()));
                 Log.d("GPS_Y", String.valueOf(location.getLongitude()));
+                Toast.makeText(view.getContext(),"lat"+String.valueOf(location.getLatitude())+"lng"+String.valueOf(location.getLongitude()),Toast.LENGTH_SHORT).show();
             }
 
             @Override

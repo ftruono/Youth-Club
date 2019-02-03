@@ -20,17 +20,17 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
-public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, Serializable {
 
-    private TextView text;
-    private String value="questo è in caso che vincenzo è strozno";
-    private String pulsanti[]=new String[4];
+    private String value=null, pulsanti[]=new String[4],imei;
     private ListView lista1;
-    //1 pub 2 bat 3 enoteca 4 discoteche
-    private ArrayAdapter<Locale> adapter;
-
+    private ArrayAdapter<BeanLocale> adapter;
+    private List<BeanLocale>risultati=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,29 +47,52 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
         //Elementi passati
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
-             value=extras.getString("nome_locale");
-             pulsanti=extras.getStringArray("tipi");
+             imei=extras.getString("imei");
+             ClientRequest clientRequest=new ClientRequest();
+            //0=ricerca per luogo 1=ricerca per gps 2=ricerca per nome
+             switch (extras.getInt("mod")){
+                 case 0:
+                     value=extras.getString("nome_locale");
+                     pulsanti=extras.getStringArray("tipi");
+                     risultati = clientRequest.search(value, 15,1);
+                     while (risultati==null){
+                         risultati = clientRequest.search(value, 15,1);
+                     }
+                     break;
+                 case 1:
+                     risultati = clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
+                     while (risultati==null){
+                         risultati = clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
+                     }
+                     break;
+                 case 2:
+                     risultati = clientRequest.search(extras.getString("nome_locale"),3);
+                     while (risultati==null){
+                         risultati = clientRequest.search(extras.getString("nome_locale"),3);
+                     }
+                     break;
+             }
 
         }
-        for(int i=0;i<4;i++){
-            if(pulsanti[i]!=null)
-                System.out.print(pulsanti[i]);
-        }
-
 
         //Lista
         lista1=findViewById(R.id.lista1);
-        CustomAdapter1 customAdapter1=new CustomAdapter1(this,R.layout.activity_mappa_lista,new ArrayList<Locale>());
+        CustomAdapter1 customAdapter1=new CustomAdapter1(this,R.layout.activity_mappa_lista,new ArrayList<BeanLocale>());
         lista1.setAdapter(customAdapter1);
 
-        for(int i=0;i<10;i++){
-            Locale locale=new Locale(null,"cazzo"+i,"fisciano","id");
+        //aggiunge gli elementi alla lista
+        int x=risultati.size();
+        for(int i=0;i<x;i++){
+            BeanLocale locale=risultati.get(i);
             customAdapter1.add(locale);
+
         }
         lista1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), InfoLocale.class);
+                i.putExtra("imei",imei);
+                i.putExtra("locale", risultati.get(position));
                 startActivity(i);
             }
         });
@@ -79,31 +102,15 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap mMap) {
         Marker marker;
-        float zoomLevel = 13.0f;
-
-        LatLng marker1 = new LatLng(40.7694772,14.7908394);
-        marker = mMap.addMarker(new MarkerOptions().position(marker1).title("marker1"));
-        marker.setTag(0);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker1,zoomLevel));
-        LatLng marker2 = new LatLng(40.773582,14.780284);
-        marker = mMap.addMarker(new MarkerOptions().position(marker2).title("marker2"));
-        marker.setTag(0);
-
+        float zoomLevel = 10.0f;
+        int x=risultati.size();
+        for(int i=0;i<x;i++){
+            LatLng l=new LatLng(risultati.get(i).getLatitudine(),risultati.get(i).getLongitudine());
+            marker = mMap.addMarker(new MarkerOptions().position(l).title(risultati.get(i).getNome()));
+            marker.setTag(0);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l,zoomLevel));
+        }
         mMap.setOnMarkerClickListener(this);
-
-
-
-        /*
-        LatLng marker1 = new LatLng(40.7694772,14.7908394);
-        googleMap.addMarker(new MarkerOptions().position(marker1).title("Marker in fisciano"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(marker1,zoomLevel));
-        LatLng marker2 = new LatLng(40.773582,14.780284);
-        googleMap.addMarker(new MarkerOptions().position(marker2).title("Marker 2"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(marker2));
-        googleMap.setOnMarkerClickListener(this);*/
-
-
-
     }
 
     /** Called when the user clicks a marker. */
