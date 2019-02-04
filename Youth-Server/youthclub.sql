@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `youth_club` /*!40100 DEFAULT CHARACTER SET latin1 */;
+USE `youth_club`;
 -- MySQL dump 10.16  Distrib 10.1.36-MariaDB, for Win32 (AMD64)
 --
 -- Host: 127.0.0.1    Database: youth_club
@@ -43,13 +45,16 @@ CREATE TABLE `locale` (
   `Nome` varchar(90) NOT NULL,
   `Via` varchar(180) NOT NULL,
   `Numero_telefono` varchar(45) DEFAULT NULL,
-  `Tot_recensioni` int(11) DEFAULT NULL,
-  `Tot_voti` int(11) DEFAULT NULL,
+  `Tot_recensioni` int(11) DEFAULT '0',
+  `TotVoti` float DEFAULT '0',
+  `voto` float DEFAULT '0' COMMENT 'indica il voto del locale.\nvoto=TotVoti/Tot_recensioni',
   `Categoria` int(11) DEFAULT NULL COMMENT '1: Bar\n2: Pub\n4:Disco\n8:Enoteca',
   `lat` float DEFAULT NULL,
   `lng` float DEFAULT NULL,
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`ID`),
+  KEY `Place` (`ID_Place`),
+  CONSTRAINT `Place` FOREIGN KEY (`ID_Place`) REFERENCES `place` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=506 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +71,7 @@ CREATE TABLE `place` (
   `Name` varchar(400) DEFAULT NULL,
   `Scadenza` datetime NOT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -88,8 +93,10 @@ CREATE TABLE `recensioni` (
   `Voto_cibo` int(11) DEFAULT NULL,
   PRIMARY KEY (`ID`),
   KEY `Account_ID` (`Account_ID`),
-  CONSTRAINT `Account_ID` FOREIGN KEY (`Account_ID`) REFERENCES `account` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  KEY `Locale` (`ID_Locale`),
+  CONSTRAINT `Account_ID` FOREIGN KEY (`Account_ID`) REFERENCES `account` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `Locale` FOREIGN KEY (`ID_Locale`) REFERENCES `locale` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -101,4 +108,4 @@ CREATE TABLE `recensioni` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-29 16:19:42
+-- Dump completed on 2019-02-04 20:18:45
