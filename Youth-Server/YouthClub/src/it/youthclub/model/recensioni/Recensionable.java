@@ -4,7 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface Recensionable {
-	public void addRecensione(Recensione r);
-	public void editRecensioneByID(Recensione r);
+	public boolean addRecensione(Recensione r);
+	public boolean editRecensioneByID(Recensione r,float oldVote);
 	public ArrayList<Recensione> getAllRecensione(int idLoc) throws SQLException;
+	public ArrayList<Recensione> getRecensioniByAccount(String s);
 }

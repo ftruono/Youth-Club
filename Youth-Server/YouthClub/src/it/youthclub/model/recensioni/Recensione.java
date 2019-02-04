@@ -32,8 +32,9 @@ public class Recensione {
 		this.votoCibo = votoCibo;
 	}
 	
-	public Recensione(int id,String testo,String titolo,int votoServizio,int votoQP,int votoCibo) {
+	public Recensione(int id,int idL,String testo,String titolo,int votoServizio,int votoQP,int votoCibo) {
 		this.id=id;
+		this.localeID=idL;
 		this.testo=testo;
 		this.titoloRecensione=titolo;
 		this.votoServizio=votoServizio;
@@ -86,7 +87,7 @@ public class Recensione {
 		this.titoloRecensione = titoloRecensione;
 	}
 	public float getVoto() {
-		return (float)Math.ceil(voto);
+		return voto;
 	}
 	
 	public int getVotoServizio() {

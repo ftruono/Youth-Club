@@ -68,13 +68,12 @@ public class SearchController {
 					names.add(l);
 			}
 			System.out.println(names.size());
-			formatjson=new Formatter(names);
-			return formatjson.getJSON();
+			
+			return Formatter.getJSON(names);
 			
 	   }
-	   formatjson=new Formatter(lst);
-	   return formatjson.getJSON();
-	 //Formatta i dati
+	   return Formatter.getJSON(lst);
+	 
 	
 	
 	}

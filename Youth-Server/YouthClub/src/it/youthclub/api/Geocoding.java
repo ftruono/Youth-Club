@@ -99,11 +99,11 @@ public class Geocoding{
 		int better=0; //indica la precisione
 		Place p;
 		if(!obj.getString("status").contains("OK")) {
-			   throw new GeoException("Impossibile decodificare il luogo");
+			   throw new GeoException(-1,"Impossibile decodificare il luogo"); //-1
 		   }
 		   try {
 		   if(obj.getString("partial_match")!="") 
-			  throw new GeoException("Risultato parziale , si prega di essere più precisi");
+			  throw new GeoException(-2,"Risultato parziale , si prega di essere più precisi"); //-2
 		   }catch(JSONException e) {
 			  
 		   }		   

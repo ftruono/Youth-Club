@@ -12,7 +12,8 @@ public class Locale {
 	private String via;
 	private String numeroCellulare;
 	private int numVotanti;
-	private int totVoti;
+	private float voto; //voto medio di tutte le recensioni
+	private float totVoto;
 	private float lat,lng;
 	private int category;
 	private String fonte;
@@ -22,26 +23,25 @@ public class Locale {
 	public Locale(String fonte) {
 		
 		numVotanti=0;
-		totVoti=0;
+		voto=0f;
+		totVoto=0f;
 		numeroCellulare="";
 		this.fonte=fonte;
 		recensioni=new ArrayList<>();
 		
 	}
 	
-	
-	
-	
-	public Locale(int id, int idPlace, String nome, String via, String numeroCellulare, int numVotanti,
-			int totVoti, float lat, float lng, int category, String fonte, String id_api) {
+   public Locale(int id, int idPlace, String nome, String via, String numeroCellulare, int numVotanti,
+			float voto,float totVoto, float lat, float lng, int category, String fonte, String id_api) {
 		
 		this.id=id;
 		this.idPlace = idPlace;
 		this.nome = nome;
+		this.totVoto=totVoto;
 		this.via = via;
 		this.numeroCellulare = numeroCellulare;
 		this.numVotanti = numVotanti;
-		this.totVoti = totVoti;
+		this.voto=voto;
 		this.lat = lat;
 		this.lng = lng;
 		this.category = category;
@@ -70,9 +70,6 @@ public class Locale {
 		this.id_api = id_api;
 	}
 
-	
-	
-	
 	public int getID() {
 		return id;
 	}
@@ -107,12 +104,7 @@ public class Locale {
 	public void setNumeroVotanti(int nv) {
 		numVotanti = nv;
 	}
-	public int getTotVoti() {
-		return totVoti;
-	}
-	public void setTotVoti(int totVoti) {
-		this.totVoti = totVoti;
-	}
+	
 
 	public void setID(int iD) {
 		id = iD;
@@ -153,8 +145,34 @@ public class Locale {
 
 
 
+	public float getVoto() {
+		return voto;
+	}
+
+
+
+
+	public void setVoto(float voto) {
+		this.voto = voto;
+	}
+
+
+
+
+	public float getTotVoto() {
+		return totVoto;
+	}
+
+
+
+
+	public void setTotVoto(float totVoto) {
+		this.totVoto = totVoto;
+	}
+
+
 	@Override
 	public int hashCode() {
-		return 31*17+nome.toLowerCase().hashCode();
+		return 31*17+id_api.toLowerCase().hashCode();
 	}
 }

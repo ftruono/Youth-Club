@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +70,7 @@ public class GoogleApi extends ApiProvider {
 			connection.disconnect();
 			JSONObject obj=new JSONObject(tot);
 			int id_p=p.getID();
-			List<Locale> temp=decodeJSON(obj,id_p);
+			Set<Locale> temp=decodeJSON(obj,id_p);
 			if(temp!=null)
 			 finalList.addAll(temp);
 			//System.out.println("len :" + finalList.size() + " query=" + query);
@@ -87,9 +88,9 @@ public class GoogleApi extends ApiProvider {
 	
 	
 	
-	private List<Locale> decodeJSON(JSONObject obj,int idplace){
+	private Set<Locale> decodeJSON(JSONObject obj,int idplace){
 		try {
-			List<Locale> loc=new LinkedList<>(); 
+			HashSet<Locale> loc=new HashSet<>(); 
 			JSONArray results=obj.getJSONArray("results");
 			for(int i=0;i<results.length();++i) {
 				JSONObject locale=results.getJSONObject(i);

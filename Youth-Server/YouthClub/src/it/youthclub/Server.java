@@ -9,6 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import it.youthclub.api.GeoException;
+import it.youthclub.model.users.UserDM;
+import it.youthclub.model.users.Utente;
+import it.youthclub.util.Formatter;
 
 
 
@@ -24,19 +27,40 @@ public class Server extends HttpServlet {
      */
     public Server() {
         // TODO Auto-generated constructor stub
+    
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//TODO:Controllo autenticazione!
-		elaborateSearchs(request, response);
+		if(authentication(request, response))
+			elaborateSearchs(request, response);
+		
+	}
+	
+	private boolean authentication(HttpServletRequest request,HttpServletResponse response) {
+		if(request.getSession().getAttribute("utente")==null) {		
+			String requestString=request.getParameter("auth");
+		    if(requestString!=null) {
+				UserDM us=new UserDM();
+				Utente t=us.getUserById(requestString);
+				if(t==null) {
+					t=new Utente(requestString);
+					us.createUser(t);
+				}
+				request.getSession().setAttribute("utente", t);
+				return true;
+		    }else 
+		    	return false;
+		}else 
+			return true;
+		
 		
 	}
 	
 	
-	private void elaborateSearchs(HttpServletRequest request,HttpServletResponse response) {
+	private synchronized void elaborateSearchs(HttpServletRequest request,HttpServletResponse response) {
 		String name=request.getParameter("name"); // se è presente il nome del locale
 		SearchController controller;
 		if(name!=null) {
@@ -46,7 +70,7 @@ public class Server extends HttpServlet {
 			if(search==null) return;
 			String category=request.getParameter("cat"); //categorie richieste
 			String mode=request.getParameter("mode"); //0:gps , 1:testo
-			int cat=-1;
+			int cat=0;
 			boolean md=true;
 			try {
 				if (category!=null)
@@ -58,21 +82,30 @@ public class Server extends HttpServlet {
 			}
 		    controller=new SearchController(search, cat, md);
 		}
-		JSONObject json;
+		JSONObject json=null;
+		response.setContentType("application/json");
 		try {
 			json = controller.search();
+			
 		} catch (GeoException ex) {
-			json=new JSONObject();
-			json.put("error", ex.getMessage());
+			try {
+				response.getWriter().println(Formatter.getJSON(ex));
+				response.getWriter().flush();
+				return;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
-		response.setContentType("application/json");
+		//stampa risultati
 		try {
 			response.getWriter().println(json);
 			response.getWriter().flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		
 		
 	}
@@ -84,36 +117,61 @@ public class Server extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	    //TODO:controllo autenticazione!
-       String review=request.getParameter("review");
-       ReviewControl control=new ReviewControl();
-       String testo,titolo;
-       int votoService,votoQP,votoCibo;
-       if(review!=null) {
-    	   testo=request.getParameter("testo");
-    	   titolo=request.getParameter("titolo");
-    	   try {
-	    	   votoService=Integer.parseInt(request.getParameter("votoServizio"));
-	    	   votoQP=Integer.parseInt(request.getParameter("votoQP"));
-	    	   votoCibo=Integer.parseInt(request.getParameter("votoCibo"));
-    	   }catch(NumberFormatException ex) {
-    		   return ;
-    		   
-    	   }
-       }else
-    	   return;
+	   if(authentication(request, response)) {
+	       String review=request.getParameter("review");
+	       ReviewControl control=new ReviewControl();
+	       String testo,titolo;
+	       int votoService,votoQP,votoCibo,idL;
+	       boolean esito;
+	       if(review!=null) {
+	    	    if(review.equals("edit")||review.equals("add")) {
+	    	    	testo=request.getParameter("testo");
+	    	    	titolo=request.getParameter("titolo");
+	    	    	   try {
+	    		    	   votoService=Integer.parseInt(request.getParameter("votoServizio"));
+	    		    	   votoQP=Integer.parseInt(request.getParameter("votoQP"));
+	    		    	   votoCibo=Integer.parseInt(request.getParameter("votoCibo"));
+	    		    	   idL=Integer.parseInt(request.getParameter("idLocale"));
+	    	    	   }catch(NumberFormatException ex) {
+	    	    		   return ;
+	    	    		   
+	    	    	   }
+	    	        if(review.equals("add")) {
+	    	        	 String account=request.getParameter("account");
+	    	        	 if(account!=null) {
+		    	        	 esito=control.addRecensione(account, idL, testo, titolo, votoService, votoQP, votoCibo);
+		    	        	 response.getWriter().println(Formatter.getJSON(esito));
+	    	        	 }
+	    	        }else if(review.equals("edit")) {
+	    	            try {
+		    	        	int id=Integer.parseInt(request.getParameter("id"));
+		    	            float oldVote=Float.parseFloat(request.getParameter("old"));
+		    	            esito=control.editRecensione(id,idL, testo, titolo, votoQP, votoService, votoCibo,oldVote);
+		    	            response.getWriter().println(Formatter.getJSON(esito));
+	    	            }catch(NumberFormatException ex) {
+	    	            	return ;
+	    	            }
+	    	            
+	    	        }
+	    	    	
+	    	    }else if(review.equals("get")) {
+	    	    	String account=request.getParameter("account");
+	    	    	if(account!=null) {
+	    	    		response.getWriter().println(Formatter.getJSON(control.getRecensioniByUser(account)));
+	    	    	}
+	    	    	
+	    	    }
+	    	   
+	    	   
+	    	   
+	       }
        
-       if(review.equals("add")) {
-    	   String account=request.getParameter("account");
-    	   int id_l=Integer.parseInt(request.getParameter("idLocale"));
-    	   control.addRecensione(account, id_l, testo, titolo, votoService, votoQP, votoCibo);
-       }else if(review.equals("edit")) {
-    	   int id=Integer.parseInt(request.getParameter("id"));
-           control.editRecensione(id, testo, titolo, votoQP, votoService, votoCibo);
-       }
+	   }
 		
 	}
 	
+	
+
 	
 	
 	

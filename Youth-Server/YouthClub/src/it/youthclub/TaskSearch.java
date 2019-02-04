@@ -21,6 +21,7 @@ public class TaskSearch extends Thread {
 	
 	public void run() {
 		List<Locale> l=provider.search(p);
+		
 		synchronized(t) {
 			t.update(l);
 		}

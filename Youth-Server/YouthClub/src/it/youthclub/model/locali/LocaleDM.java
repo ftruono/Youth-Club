@@ -77,7 +77,7 @@ public class LocaleDM implements Localable{
 			ResultSet rs = preparedStatament.executeQuery();
 		    while(rs.next()) {
 			   Locale l=new Locale(rs.getInt("ID"),rs.getInt("ID_Place"),rs.getString("Nome"),rs.getString("Via"),rs.getString("Numero_telefono"),
-					   rs.getInt("Tot_recensioni"),rs.getInt("Tot_voti"),rs.getFloat("lat"),rs.getFloat("lng"),rs.getInt("Categoria"),
+					   rs.getInt("Tot_recensioni"),rs.getFloat("voto"),rs.getFloat("TotVoti"),rs.getFloat("lat"),rs.getFloat("lng"),rs.getInt("Categoria"),
 					   rs.getString("Fonte"),rs.getString("id_api"));
 			
 			   
@@ -124,6 +124,43 @@ public class LocaleDM implements Localable{
 		}
 			
 		}
+	
+	
+	
+	public void addReviewLocale(Recensione s) {
+	  String sql="UPDATE locale set Tot_recensioni=(Tot_recensioni+1),TotVoti=(TotVoti + ?),voto=TotVoti/Tot_recensioni  where(ID=?)";
+	   try {
+		   con=DriverManagerConnectionPool.getConnection();
+		   PreparedStatement preparedStatament=con.prepareStatement(sql);
+		   preparedStatament.setFloat(1, s.getVoto());
+		   preparedStatament.setInt(2, s.getLocaleID());
+		   preparedStatament.executeUpdate();
+		   preparedStatament.close();
+		   DriverManagerConnectionPool.releaseConnection(con);
+	   }catch(SQLException ex) {
+		   ex.printStackTrace();
+	   }
+	
+	
+	}
+	
+	
+	public void editReviewLocale(Recensione s,float oldVote) {
+		String sql="UPDATE locale set TotVoti=(TotVoti - ? + ?),voto=TotVoti/Tot_recensioni where(ID=?)";
+		 try {
+			   con=DriverManagerConnectionPool.getConnection();
+			   PreparedStatement preparedStatament=con.prepareStatement(sql);
+			   preparedStatament.setFloat(1, oldVote);
+			   preparedStatament.setFloat(2, s.getVoto());
+			   preparedStatament.setInt(3, s.getLocaleID());
+			   preparedStatament.executeUpdate();
+			   preparedStatament.close();
+			   DriverManagerConnectionPool.releaseConnection(con);
+		   }catch(SQLException ex) {
+			   ex.printStackTrace();
+		   }
+		
+	}
 }
 	
 

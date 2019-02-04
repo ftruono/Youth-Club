@@ -62,6 +62,7 @@ public class ParallelingSearch implements onUpdateTask{
 	
 	private List<Locale> doUpdate() {
 		System.out.println("Sono finiti i 3thread");
+		
 		if(p.getStatus()==Place.NOTEXIST)
 			lm.addAllLocale(lst);	
 		else  //PLACE.EXPIRED_EXIST
