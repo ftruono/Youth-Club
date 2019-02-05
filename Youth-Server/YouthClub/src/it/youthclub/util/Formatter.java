@@ -37,6 +37,7 @@ public final class Formatter {
 		   localeJSON.put("voto", loc.getVoto());
 		   localeJSON.put("lat",loc.getLatitudine());
 		   localeJSON.put("lng", loc.getLongitudine());
+		   localeJSON.put("categoria", loc.getCategory());
 		   JSONArray recensioniJSONArray=new JSONArray();
 		   for(Recensione rec:loc.getRecensioni()) {
 			   JSONObject recensioniJSON=new JSONObject();
