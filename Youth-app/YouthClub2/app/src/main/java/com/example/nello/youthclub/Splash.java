@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import it.youthclub.activity.MainActivity;
+
 public class Splash extends AppCompatActivity {
 
     private ImageView immagine;

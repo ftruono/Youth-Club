@@ -26,16 +26,17 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import it.youthclub.beans.Utente;
+
 import static android.location.LocationManager.*;
 
 public class Ricerca_localita extends AppCompatActivity {
     private EditText editText;
     private CheckBox cb1, cb2, cb3, cb4;
     private ImageView cerca;
-    private String pulsanti[] = new String[4];
-    //1 pub 2 bat 3 enoteca 4 discoteche
+    private int pulsanti=0;
     private ImageView gps;
-
+    private Utente t;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,41 +60,44 @@ public class Ricerca_localita extends AppCompatActivity {
                 i.putExtra("mod",0);
                 Bundle exstras=getIntent().getExtras();
                 if(exstras!=null){
-                    i.putExtra("imei",exstras.getString("imei"));
+                    t=new Utente(exstras.getString("imei"));
+                    i.putExtra("utente",t);
+                    startActivity(i);
                 }
-                startActivity(i);
             }
         });
+
         cb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pulsanti[0] = "pub";
+                pulsanti+=2;
             }
         });
         cb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pulsanti[1] = "bar";
+                pulsanti+=1;
             }
         });
         cb3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pulsanti[2] = "enoteca";
+                pulsanti+=8;
             }
         });
         cb4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pulsanti[3] = "discoteca";
+                pulsanti+=4;
             }
         });
 
     }
 
-
+    //GPS
     @SuppressLint("MissingPermission")
     public void gpsposition(final View view) {
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             ActivityCompat.requestPermissions(this,
@@ -101,8 +105,6 @@ public class Ricerca_localita extends AppCompatActivity {
                     0);
             //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
             return;
-
-
         }
         LocationManager locationManager = null;
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10, new LocationListener() {

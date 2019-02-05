@@ -27,7 +27,7 @@ public class CustomAdapter1 extends ArrayAdapter<Locale> {
         locale=getItem(position);
         nome.setText(locale.getNome());
         via.setText(locale.getVia());
-        img.setImageResource(R.drawable.ic_disco_black_24dp);
+        img.setImageResource(R.drawable.ic_audiotrack);
         v.setTag(locale);
         return v;
     }

@@ -3,20 +3,18 @@ package com.example.nello.youthclub;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
+import it.youthclub.activity.MainActivity;
 import it.youthclub.beans.Recensione;
+import it.youthclub.beans.Utente;
 
 public class EditRecensione extends AppCompatActivity {
-    private int id;//id utente
+    private Utente t;
     private int localeID;
     private Recensione recensione=null;
     private TextView nomeLocale,viaLocale;
@@ -40,7 +38,7 @@ public class EditRecensione extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            id = extras.getInt("id_utente");
+            t= (Utente) extras.getSerializable("utente");
             localeID = extras.getInt("id_locale");
             nomeLocale.setText(extras.getString("nomelocale"));
             viaLocale.setText(extras.getString("via"));
@@ -63,6 +61,7 @@ public class EditRecensione extends AppCompatActivity {
 
 
     public void sumbitRecesione(View v){
+        int votoQPi = (int) votoQP.getRating() ,votoSi=(int) votoS.getRating(),votoCi=(int)votoC.getRating();
 
         if(titolo.getText().length()==0) {
             Toast.makeText(this, "Scrivere un titolo alla recensione", Toast.LENGTH_SHORT).show();
@@ -73,11 +72,15 @@ public class EditRecensione extends AppCompatActivity {
         } else {
             //URL ulr=new URL("http://10.0.0.2:8080/index.jsp?review=add&account="+id+"&testo="+testoR+"&titolo="+titolo+"&votoServizio="+votoS+"&votoQP="+votoQP+"&votoCibo="+votoC+"&idLocale="+localeID);
             int contatore=0;
-            ClientRequest clientRequest=new ClientRequest(null);
-
+            ClientRequest clientRequest=new ClientRequest(t);
+             contatore=clientRequest.addReview(t.getImei(),testoR.getText().toString(),titolo.getText().toString(),votoSi,votoQPi,votoCi,localeID);
                //int codeResponse=clientRequest.addReview();
                 //TODO controllo del codeResponse . vedere ODD
 
+            while (contatore==0){
+                contatore=clientRequest.addReview(t.getImei(),testoR.getText().toString(),titolo.getText().toString(),votoSi,votoQPi,votoCi,localeID);
+
+            }
 
 
 

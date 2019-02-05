@@ -21,12 +21,13 @@ import java.util.ArrayList;
 
 import it.youthclub.beans.Locale;
 import it.youthclub.beans.Recensione;
+import it.youthclub.beans.Utente;
 
 public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private Locale locale;
     private TextView textViewnomeloclae,tvvia,tvNumeroTelefono;
     private ListView lista_recensione;
-    private String imei;
+    private Utente t;
     private RatingBar tvtotalevoti;
     private Button scrivi;
     @Override
@@ -48,7 +49,7 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
 
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
-            imei=extras.getString("imei");
+            t= (Utente) extras.getSerializable("utente");
             locale= (Locale) extras.getSerializable("locale");
         }
         textViewnomeloclae.setText(locale.getNome());
@@ -70,7 +71,7 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
             @Override
             public void onClick(View v) {
                 Intent i=new Intent(getApplicationContext(),EditRecensione.class);
-                i.putExtra("id_utente",imei);
+                i.putExtra("utente",t);
                 i.putExtra("id_locale",locale.getPlaceID());
                 i.putExtra("nomelocale",locale.getNome());
                 i.putExtra("via",locale.getVia());

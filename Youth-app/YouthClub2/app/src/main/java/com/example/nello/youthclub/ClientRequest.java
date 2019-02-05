@@ -29,10 +29,10 @@ import it.youthclub.processing.Task;
 public class ClientRequest  {
 
     private Utente user;
+
+
     public ClientRequest(Utente t) {
         this.user=t;
-
-
     }
 
 
@@ -120,8 +120,12 @@ public class ClientRequest  {
 
         Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
          t1.execute(url);
-        try {
-            return decodeJSONReview(t1.get());
+
+        try { JSONObject o=t1.get();
+
+
+            int x=decodReview(t1.get());
+            return x;
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {

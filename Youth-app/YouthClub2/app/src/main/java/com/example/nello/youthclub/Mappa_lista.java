@@ -23,12 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.youthclub.beans.Locale;
+import it.youthclub.beans.Utente;
 
 public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, Serializable {
 
     private String value=null, pulsanti[]=new String[4],imei;
     private ListView lista1;
-    private ArrayAdapter<Locale> adapter;
+    private Utente t;
     private List<Locale>risultati=new ArrayList<>();
 
     @Override
@@ -36,8 +37,7 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_mappa_lista);
-        // Get the SupportMapFragment and request notification
-        // when the map is ready to be used.
+        // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -45,8 +45,9 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
         //Elementi passati
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
-             imei=extras.getString("imei");
-             ClientRequest clientRequest=new ClientRequest(null);
+             t= (Utente) extras.getSerializable("utente");
+             ClientRequest clientRequest=new ClientRequest(t);
+             clientRequest.autenticator();
             //0=ricerca per luogo 1=ricerca per gps 2=ricerca per nome
              switch (extras.getInt("mod")){
                  case 0:
@@ -89,7 +90,7 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), InfoLocale.class);
-                i.putExtra("imei",imei);
+                i.putExtra("utente",t);
                 i.putExtra("locale", risultati.get(position));
                 startActivity(i);
             }

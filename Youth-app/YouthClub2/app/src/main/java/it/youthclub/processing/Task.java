@@ -29,6 +29,9 @@ public class Task extends AsyncTask<URL,Integer, JSONObject> {
     private Operation mode;
     private String method;
     private Utente user;
+
+
+
     public Task(Operation op, String method, Utente t){
         this.method=method;
         this.mode=op;
