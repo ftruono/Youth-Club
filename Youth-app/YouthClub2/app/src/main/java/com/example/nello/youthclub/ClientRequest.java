@@ -2,7 +2,6 @@ package com.example.nello.youthclub;
 
 import android.os.AsyncTask;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,169 +15,202 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import it.youthclub.beans.Locale;
+import it.youthclub.beans.Recensione;
+import it.youthclub.beans.Utente;
+import it.youthclub.processing.Task;
 
 public class ClientRequest  {
-    List<BeanLocale> p;
-    List<BeanLocale> lista;
-    private URL url;
-    private int code;
 
+    private Utente user;
+    public ClientRequest(Utente t) {
+        this.user=t;
 
-    private int mod=0;//0=autenticator 1=ricerca per luogo 2=ricerca per gps 3=ricerca per nome
-                      //4=aggiunta della recensione 5=modifica della recensione 6=ricerca della recensione
-    public ClientRequest() {
 
     }
 
 
 
 
-    public void autenticator(String imei,int mod){
+    public void autenticator(){
         try {
 
-            url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?auth="+imei);
+            URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?auth="+ user.getImei());
             // http://localhost:8080//YouthClub/
-            this.mod=mod;
+
+            Task tsk=new Task(Task.Operation.AUTENTICAZIONE,"GET",user);
+            tsk.execute(url);
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.execute(String.valueOf(url));
     }
 
     //paese o coordinate gps
-    public List<BeanLocale>  search(final String luogo, final int cat,int mod) {//0 GPS 1 string
+    public List<Locale>  search(final String luogo, final int cat, int mod) {//0 GPS 1 string
         try {
-             url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?search="+luogo+",italia"+"&mode=1&cat="+cat);
-            // http://localhost:8080//YouthClub/
-            this.mod=mod;
+             List<Locale> locali=new ArrayList<>();
+             URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?search="+luogo+"&mode=1&cat="+cat);
+             // http://localhost:8080//YouthClub/
+            Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"GET",user);
+            t1.execute(url);
+            return decodeJSON(t1.get());
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.execute(String.valueOf(url));
-
-        return lista;
+        return null;
 
     }
 
     //Ricerca usando latidune e logitudine del gps
-    public List<BeanLocale> search(Float lat,Float lng,int cat,int mod){//0 gps 1 string
+    public List<Locale> search(Float lat, Float lng, int cat, int mod){//0 gps 1 string
         try {
-             url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?search="+lat+","+lng+"&cat="+cat+"&mod=1");
-           // http://localhost:8080//YouthClub/
-            this.mod=mod;
+             URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?search="+lat+","+lng+"&cat="+cat+"&mode=1");
+             Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"GET",user);
+             t1.execute(url);
+             return decodeJSON(t1.get());
+
         } catch (MalformedURLException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.execute(String.valueOf(url));
-
-        return lista;
+        return null;
     }
 
-    public List<BeanLocale> search(String luogo,int mod){
+    public List<Locale> search(String luogo, int mod){
         //URL http://youthclub.ddns.net:8080/index.jsp?name=[ricerca]
         try {
-            url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?name="+luogo);
-            this.mod=mod;
+            if (!luogo.contains(",")) return null;
+            URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?name="+luogo);
+            Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"GET",user);
+            t1.execute(url);
+            return decodeJSON(t1.get());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int addReview(String account,String testo,String titolo,int votoS,int votoQP,int votoCibo,int idL){
+
+        URL url= null;
+        try {
+            url = new URL("http://10.0.0.2:8080/index.jsp?review=add&account=" + account + "&testo=" + testo +
+            "&titolo=" + titolo + "&votoServizio=" +  votoS + "&votoQP=" + votoQP + "&votoCibo=" + votoCibo + "&idLocale=" + idL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.execute(String.valueOf(url));
 
-        return lista;
+        Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
+         t1.execute(url);
+        try {
+            return decodeJSONReview(t1.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
-    public int addReview(BeanRecensione recensione,int mod){
+    public int editReview(int id,int idL,String testo,String titolo,int votoS,int votoQP,int votoCibo,float oldVote){
+        URL url= null;
         try {
-            url=new URL("http://youthclub.ddns.net:8080/index.jsp?review=add&account="+recensione.getAccountID()+"&testo="+recensione.getTesto()+"&titolo="+recensione.getTitoloRecensione()+"&votoServizio="+recensione.getVotoServizio()+"&votoQP="+recensione.getVotoQP()+"&votoCibo="+recensione.getVotoCibo()+"&idLocale="+recensione.getLocaleID());
-            this.mod=mod;
+            url = new URL("http://10.0.0.2:8080/index.jsp?review=edit&id=" + id + "&testo=" + testo +
+                    "&titolo=" + titolo + "&votoServizio=" +  votoS + "&votoQP=" + votoQP + "&votoCibo=" + votoCibo + "&idLocale=" + idL );
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.execute(String.valueOf(url));
-        return code;
+
+        Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
+        t1.execute(url);
+        try {
+            return decodeJSONReview(t1.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public List<Recensione> getReviewsByAccount(){
+
+        URL url= null;
+        try {
+            url = new URL("http://10.0.0.2:8080/index.jsp?review=get&account=" + user.getImei());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
+        t1.execute(url);
+        try {
+            t1.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return null; //TODO scrivere il rispettivo metodo di decode!
     }
 
 
 
 
-    public List<BeanLocale> decod(JSONObject obj) {
+   private int decodeJSONReview(JSONObject obj){
+       try {
+           JSONObject response=obj.getJSONObject("response");
+           return obj.getInt("code");
+       } catch (JSONException e) {
+
+       }
+
+       return 0;
+   }
+
+    private List<Locale> decodeJSON(JSONObject obj) {
         try {
-            List<BeanLocale> loc=new LinkedList<>();
+            //TODO: controlli duplicati e errore di DecodeException (sfrutta throws)!
+            List<Locale> loc=new LinkedList<>();
             JSONArray results=obj.getJSONArray("results");
+
             for(int i=0;i<results.length();++i) {
                 JSONObject locale=results.getJSONObject(i);
-                BeanLocale l=new BeanLocale();
-                BeanRecensione r=new BeanRecensione();
-
-                if (locale.getInt("id")>0){
-                    l.setID(locale.getInt("id"));
-                }else {
-                    l.setID(0);
-                }
-                if (locale.getString("id_api").equals(null)){
-                    l.setIdApi(null);
-                }else {
-                    l.setIdApi(locale.getString("id_api"));
-                }
-                if (locale.getString("fonte").equals(null)){
-                    l.setFonte(null);
-                }else {
-                    l.setFonte(locale.getString("fonte"));
-                }
-                if (locale.getInt("id_place")>0){
-                    l.setPlaceID(locale.getInt("id_place"));
-                }else {
-                    l.setPlaceID(0);
-                }
-                if (locale.getString("nome").equals(null)){
-                    l.setNome(null);
-                }else {
-                    l.setNome(locale.getString("nome"));
-                }
-                if (locale.getString("via").equals(null)){
-                    l.setVia(null);
-                }else {
-                    l.setVia(locale.getString("via"));
-                }
-                if (locale.getString("numero_cellulare").equals(null)){
-                    l.setPhone(null);
-                }else {
-                    l.setPhone(locale.getString("numero_cellulare"));
-                }
-                if (locale.getInt("numRecensioni")>0){
-                    l.setMediaVoto(locale.getInt("media_recensioni"));
-                }else {
-                    l.setMediaVoto(0);
-                }
-
-                if (Float.parseFloat(locale.getString("lat"))>0){
-                    l.setLatitudine(Float.parseFloat(locale.getString("lat")));
-                }else {
-                    l.setLatitudine(0);
-                }
-                if (Float.parseFloat(locale.getString("lng"))>0){
-                    l.setLongitudine(Float.parseFloat(locale.getString("lng")));
-                }else {
-                    l.setLongitudine(0);
-                }
-
-                //effettua il controllo se il locale trovato prima è lo stesso dell'attuale
-                //nel caso in cui fosse lo stesso unisce i dati
-                if(loc.get(i-1).getNome().equals(l.getNome())){
-                    //TODO da completare la copia
-                }
-
-                   JSONArray recensioneArray= locale.getJSONArray("recensioni");
-                    if(recensioneArray.length()>0){
-                        JSONObject recensione = results.getJSONObject(i);
+                Locale l=new Locale();
+                l.setPlaceID(locale.getInt("id_place"));
+                l.setCategory(locale.getInt("categoria"));
+                l.setPhone(locale.getString("numero_cellulare"));
+                l.setMediaVoto(locale.getLong("voto"));
+                l.setLongitudine(locale.getLong("lng"));
+                l.setLatitudine(locale.getLong("lat"));
+                l.setFonte(locale.getString("fonte"));
+                l.setNome(locale.getString("nome"));
+                l.setID(locale.getInt("id"));
+                l.setIdApi(locale.getString("id_api"));
+                l.setVia(locale.getString("via"));
+                JSONArray recensioneArray= locale.getJSONArray("recensioni");
+                    for (int j = 0; j < recensioneArray.length(); ++j) {
+                        JSONObject recensione = recensioneArray.getJSONObject(j);
+                        Recensione r = new Recensione();
                         r.setId(recensione.getInt("id"));
                         r.setAccountID(recensione.getString("accountID"));
                         r.setTesto(recensione.getString("testo"));
@@ -187,141 +219,36 @@ public class ClientRequest  {
                         r.setVotoServizio(Integer.parseInt(recensione.getString("votoService")));
                         r.setVotoQP(Integer.parseInt(recensione.getString("votoQP")));
                         r.setVotoCibo(Integer.parseInt(recensione.getString("VotoCibo")));
+                        l.addReview(r);
                     }
-
-
-
                 loc.add(l);
-
-
             }
             return loc;
         } catch (JSONException e) {
             System.out.println(e.getMessage());
-            return null;
-        }
 
+        }
+        return null;
+
+    }
+
+    public int decodReview(JSONObject obj){
+        try {
+            JSONArray results=obj.getJSONArray("response");
+            for(int i=0;i<results.length();++i) {
+                JSONObject risposta=results.getJSONObject(i);
+               return risposta.getInt("code");
+
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
 
 
-    class NetworkTask extends AsyncTask<String, Integer, List<BeanLocale>> {
-
-            @Override
-            protected void onPreExecute() {
-            }
-
-            @Override
-            protected List<BeanLocale> doInBackground(String... values) {
-
-                switch (mod){
-                    case 0:
-                        CookieManager cookieManager = new CookieManager();
-
-                        try {
-                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                            connection.setRequestMethod("GET");
-                            Map<String, List<String>> headerFields = connection.getHeaderFields(); //recupero i campi
-                            List<String> cookiesHeader = headerFields.get("Set-Cookie"); //prendo solo i cookies
-
-                            if (cookiesHeader != null) {
-                                for (String cookie : cookiesHeader) {
-                                    System.out.println(cookie);
-                                    cookieManager.getCookieStore().add(null,HttpCookie.parse(cookie).get(0));
-                                }
-
-                                //ottengo il jsessionid e lo riutilizzo per le volte successive!
-                            }
-
-                        } catch (ProtocolException e1) {
-                            e1.printStackTrace();
-                        } catch (MalformedURLException e1) {
-                            e1.printStackTrace();
-                        } catch (IOException e1) {
-                            e1.printStackTrace();
-                        }
-                        break;
-                    case 1:
-                        try {
-                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                        BufferedReader read=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                        String tot="";
-                        String single="";
-                        while( (single=read.readLine()) !=null) {
-                            tot+=single;
-                        }
-                        read.close();
-                        connection.disconnect();
-                        JSONObject obj=new JSONObject(tot);
-                        lista=decod(obj);
-                        return lista;
-                        } catch (IOException exception) {
-                            exception.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                    case 2:
-                        try {
-                            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                            BufferedReader read=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                            String tot="";
-                            String single="";
-                            while( (single=read.readLine()) !=null) {
-                                tot+=single;
-                            }
-                            read.close();
-                            connection.disconnect();
-                            JSONObject obj=new JSONObject(tot);
-                            lista=decod(obj);
-                            return lista;
-                        } catch (IOException exception) {
-                            exception.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                     case 3:
-                         try {
-                             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                             BufferedReader read=new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                             String tot="";
-                             String single="";
-                             while( (single=read.readLine()) !=null) {
-                                 tot+=single;
-                             }
-                             read.close();
-                             connection.disconnect();
-                             JSONObject obj=new JSONObject(tot);
-                             lista=decod(obj);
-                             return lista;
-
-                         } catch (MalformedURLException e) {
-                             e.printStackTrace();
-                         } catch (IOException e) {
-                             e.printStackTrace();
-                         } catch (JSONException e) {
-                             e.printStackTrace();}
-                        break;
 
 
 
-                }
-
-
-
-                return null;
-            }
-
-
-
-            protected void onPostExecute(JSONObject obj) {
-
-                lista=decod(obj);
-
-            }
-        }
-
-    }
+}

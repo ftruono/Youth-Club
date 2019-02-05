@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-public class CustomAdapterRecensione1 extends ArrayAdapter<BeanRecensione> {
+import it.youthclub.beans.Recensione;
+
+public class CustomAdapterRecensione1 extends ArrayAdapter<Recensione> {
     private LayoutInflater inflater;
     private RatingBar stelle;
     private TextView titolo,testo;
@@ -26,7 +28,7 @@ public class CustomAdapterRecensione1 extends ArrayAdapter<BeanRecensione> {
         stelle=v.findViewById(R.id.ratingBar);
         titolo=v.findViewById(R.id.titolo_recensione);
         testo=v.findViewById(R.id.testo_recensione);
-        BeanRecensione rec=getItem(position);
+        Recensione rec=getItem(position);
         stelle.setRating(rec.getVoto());
         titolo.setText(rec.getTitoloRecensione());
         testo.setText(rec.getTesto());
@@ -34,7 +36,7 @@ public class CustomAdapterRecensione1 extends ArrayAdapter<BeanRecensione> {
 
         return v;
     }
-    public  CustomAdapterRecensione1 (Context context, int resource, List<BeanRecensione> objects){
+    public  CustomAdapterRecensione1 (Context context, int resource, List<Recensione> objects){
         super(context, resource, objects);
         inflater = LayoutInflater.from(context);
     }

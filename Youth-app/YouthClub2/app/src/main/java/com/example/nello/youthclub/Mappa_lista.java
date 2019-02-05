@@ -1,7 +1,6 @@
 package com.example.nello.youthclub;
 
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,15 +20,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+
+import it.youthclub.beans.Locale;
 
 public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, Serializable {
 
     private String value=null, pulsanti[]=new String[4],imei;
     private ListView lista1;
-    private ArrayAdapter<BeanLocale> adapter;
-    private List<BeanLocale>risultati=new ArrayList<>();
+    private ArrayAdapter<Locale> adapter;
+    private List<Locale>risultati=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +38,7 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_mappa_lista);
         // Get the SupportMapFragment and request notification
         // when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 
@@ -48,7 +46,7 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
              imei=extras.getString("imei");
-             ClientRequest clientRequest=new ClientRequest();
+             ClientRequest clientRequest=new ClientRequest(null);
             //0=ricerca per luogo 1=ricerca per gps 2=ricerca per nome
              switch (extras.getInt("mod")){
                  case 0:
@@ -60,13 +58,13 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
                      }
                      break;
                  case 1:
-                     risultati = clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
+                     risultati=clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
                      while (risultati==null){
                          risultati = clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
                      }
                      break;
                  case 2:
-                     risultati = clientRequest.search(extras.getString("nome_locale"),3);
+                     risultati =clientRequest.search(extras.getString("nome_locale"),3);
                      while (risultati==null){
                          risultati = clientRequest.search(extras.getString("nome_locale"),3);
                      }
@@ -77,13 +75,13 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
 
         //Lista
         lista1=findViewById(R.id.lista1);
-        CustomAdapter1 customAdapter1=new CustomAdapter1(this,R.layout.activity_mappa_lista,new ArrayList<BeanLocale>());
+        CustomAdapter1 customAdapter1=new CustomAdapter1(this,R.layout.activity_mappa_lista,new ArrayList<Locale>());
         lista1.setAdapter(customAdapter1);
 
         //aggiunge gli elementi alla lista
         int x=risultati.size();
         for(int i=0;i<x;i++){
-            BeanLocale locale=risultati.get(i);
+            Locale locale=risultati.get(i);
             customAdapter1.add(locale);
 
         }

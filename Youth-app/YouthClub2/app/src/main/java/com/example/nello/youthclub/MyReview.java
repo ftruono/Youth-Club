@@ -5,7 +5,8 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import it.youthclub.beans.Recensione;
 
 public class MyReview extends AppCompatActivity {
     private ListView lista;
@@ -21,11 +22,11 @@ public class MyReview extends AppCompatActivity {
             imei=extras.getString("imei");
         }
 
-        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,new ArrayList<BeanRecensione>());
+        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,new ArrayList<Recensione>());
         lista.setAdapter(customAdapterRecensione1);
         //TODO da sostituire con le vere recensioni
         for(int i=0;i<20;i++){
-            BeanRecensione beanRecensione=new BeanRecensione(i,"x",0,"xx","yy",1,2,3,4);
+            Recensione beanRecensione=new Recensione(i,"x",0,"xx","yy",1,2,3,4);
             customAdapterRecensione1.add(beanRecensione);
         }
     }

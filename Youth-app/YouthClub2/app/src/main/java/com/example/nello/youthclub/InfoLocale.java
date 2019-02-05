@@ -12,14 +12,18 @@ import android.widget.TextView;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import it.youthclub.beans.Locale;
+import it.youthclub.beans.Recensione;
+
 public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
-    private BeanLocale locale;
+    private Locale locale;
     private TextView textViewnomeloclae,tvvia,tvNumeroTelefono;
     private ListView lista_recensione;
     private String imei;
@@ -29,7 +33,10 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_locale);
-
+        // Get the SupportMapFragment and request notification
+        // when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         textViewnomeloclae=findViewById(R.id.nome);
         tvvia=findViewById(R.id.via);
@@ -42,19 +49,19 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
             imei=extras.getString("imei");
-            locale= (BeanLocale) extras.getSerializable("locale");
+            locale= (Locale) extras.getSerializable("locale");
         }
         textViewnomeloclae.setText(locale.getNome());
         tvtotalevoti.setRating(locale.getMediaVoto());
         tvNumeroTelefono.setText(locale.getPhone());
         tvvia.setText(locale.getVia());
 
-        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,new ArrayList<BeanRecensione>());
+        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,new ArrayList<Recensione>());
         lista_recensione.setAdapter(customAdapterRecensione1);
         //TODO da sostituire con le vere recensioni
         for(int i=0;i<20;i++){
-            BeanRecensione beanRecensione=new BeanRecensione(i,"x",0,"xx","yy",1,2,3,4);
-            customAdapterRecensione1.add(beanRecensione);
+            Recensione recensione =new Recensione(i,"x",0,"xx","yy",1,2,3,4);
+            customAdapterRecensione1.add(recensione);
         }
 
 
@@ -81,9 +88,12 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         Marker marker;
         float zoomLevel = 10.0f;
-        LatLng l=new LatLng(locale.getLatitudine(),locale.getLongitudine());
-        marker = googleMap.addMarker(new MarkerOptions().position(l).title(locale.getNome()));
-        marker.setTag(0);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l,zoomLevel));
+
+            LatLng l=new LatLng(locale.getLatitudine(),locale.getLongitudine());
+            marker = googleMap.addMarker(new MarkerOptions().position(l).title(locale.getNome()));
+            marker.setTag(0);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(l,zoomLevel));
+
+        googleMap.setOnMarkerClickListener(this);
     }
 }

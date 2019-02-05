@@ -16,12 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    private String imei;
+import it.youthclub.beans.Utente;
+
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+
+    //TODO appena si avvia l'app deve creare l'istanza di utente con l'imei e utente deve essere passata da un activity all'altra
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,20 +39,6 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_PHONE_STATE},
-                    0);
-            //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
-        }
-
-        imei=telephonyManager.getDeviceId();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -76,8 +66,9 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            // ClientRequest clientRequest=new ClientRequest();
-            // clientRequest.autenticator("0");
+            ClientRequest clientRequest=new ClientRequest(new Utente("giggino"));
+            clientRequest.autenticator();
+            clientRequest.search("Salerno",1,1);
                 Toast.makeText(getApplicationContext(),"setting",Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
@@ -91,11 +82,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.my_profile) {
             Intent i = new Intent(getApplicationContext(), profile.class);
-            i.putExtra("imei",imei);
+           // i.putExtra("imei",getImei());
             startActivity(i);
         } else if (id == R.id.my_review) {
             Intent i = new Intent(getApplicationContext(), MyReview.class);
-            i.putExtra("imei",imei);
+            //i.putExtra("imei",getImei());
             startActivity(i);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -105,12 +96,29 @@ public class MainActivity extends AppCompatActivity
 
     public void lanciaRicerca_locale(View v) {
         Intent i = new Intent(getApplicationContext(), Ricerca_localita.class);
-        i.putExtra("imei",imei);
+        //i.putExtra("imei",getImei());
         startActivity(i);
     }
     public void lanciaRicerca_Nome(View v) {
         Intent i = new Intent(getApplicationContext(), Ricerca_nome.class);
-        i.putExtra("imei",imei);
+       // i.putExtra("imei",getImei());
         startActivity(i);
+    }
+
+    public String getImei(){
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    0);
+            //requestPermissions(new String[]{Manifest.permission.READ_CONTACTS},0);
+        }
+
+        String imei=telephonyManager.getDeviceId();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        return imei;
     }
 }

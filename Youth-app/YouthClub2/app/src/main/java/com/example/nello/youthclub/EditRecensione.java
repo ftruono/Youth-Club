@@ -10,12 +10,15 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+
+import it.youthclub.beans.Recensione;
 
 public class EditRecensione extends AppCompatActivity {
     private int id;//id utente
     private int localeID;
-    private BeanRecensione recensione=null;
+    private Recensione recensione=null;
     private TextView nomeLocale,viaLocale;
     private EditText titolo,testoR;
     private RatingBar votoT,votoQP,votoS,votoC;// float voto int votoServizio int votoQP int votoCibo;
@@ -43,7 +46,7 @@ public class EditRecensione extends AppCompatActivity {
             viaLocale.setText(extras.getString("via"));
 
             if (scrivi = extras.getBoolean("valoreRec")) {
-                recensione = (BeanRecensione) extras.getSerializable("recensione");
+                recensione = (Recensione) extras.getSerializable("recensione");
                 titolo.setText(recensione.getTesto());
                 testoR.setText(recensione.getTesto());
                 votoT.setRating(recensione.getVoto());
@@ -55,7 +58,7 @@ public class EditRecensione extends AppCompatActivity {
     }
 
 
-//TODO controllare il comportamento del server quando modifico una recensione
+
 
 
 
@@ -68,8 +71,17 @@ public class EditRecensione extends AppCompatActivity {
             Toast.makeText(this, "Scrivere un testo alla recensione", Toast.LENGTH_SHORT).show();
 
         } else {
-            //URL ulr=new URL("http://youthclub.ddns.net:8080/index.jsp?review=add&account="+id+"&testo="+testoR+"&titolo="+titolo+"&votoServizio="+votoS+"&votoQP="+votoQP+"&votoCibo="+votoC+"&idLocale="+localeID);
-            //TODO connesione al server
+            //URL ulr=new URL("http://10.0.0.2:8080/index.jsp?review=add&account="+id+"&testo="+testoR+"&titolo="+titolo+"&votoServizio="+votoS+"&votoQP="+votoQP+"&votoCibo="+votoC+"&idLocale="+localeID);
+            int contatore=0;
+            ClientRequest clientRequest=new ClientRequest(null);
+
+               //int codeResponse=clientRequest.addReview();
+                //TODO controllo del codeResponse . vedere ODD
+
+
+
+
+
             Toast.makeText(this, "recensione iniviata", Toast.LENGTH_SHORT).show();
             Intent i = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(i);
