@@ -1,7 +1,6 @@
 package it.youthclub.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import com.example.nello.youthclub.EditRecensione;
 import com.example.nello.youthclub.R;
 
 import java.util.List;
@@ -24,7 +21,7 @@ public class CustomAdapterRecensione1 extends ArrayAdapter<Recensione> {
     private RatingBar stelle;
     private TextView titolo,testo;
     private Button modifica;
-
+    private String imei;
 
     public View getView(int position, View v, ViewGroup parent){
         if(v==null){
@@ -39,14 +36,17 @@ public class CustomAdapterRecensione1 extends ArrayAdapter<Recensione> {
         testo.setText(rec.getTesto());
         modifica=v.findViewById(R.id.modifica_recensione);
         modifica.setTag(rec);
-
+        if(!rec.getAccountID().equals(imei)){
+            modifica.setVisibility(View.INVISIBLE);
+        }
 
         return v;
 
 
     }
-    public  CustomAdapterRecensione1 (Context context, int resource, List<Recensione> objects){
+    public  CustomAdapterRecensione1(Context context, int resource, List<Recensione> objects, String imei){
         super(context, resource, objects);
+        this.imei=imei;
         inflater = LayoutInflater.from(context);
     }
 }

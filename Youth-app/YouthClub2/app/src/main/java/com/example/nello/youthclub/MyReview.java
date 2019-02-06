@@ -4,10 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import it.youthclub.adapters.CustomAdapterRecensione1;
@@ -32,7 +30,7 @@ public class MyReview extends AppCompatActivity {
 
         ClientRequest req=new ClientRequest(user);
         rec=req.getReviewsByAccount();
-        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,rec);
+        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,rec, user.getImei());
         lista.setAdapter(customAdapterRecensione1);
 
 

@@ -33,25 +33,30 @@ public class LocaliAdpter extends ArrayAdapter<Locale> {
         nome.setText(locale.getNome());
         via.setText(locale.getVia());
 
-        /*Integer[] x=cat.getSingleCategoriesFromValue(locale.getCategory());
-        Random r=new Random(x.length-1);
-        int value=r.nextInt();
-        switch(value){
-            case 0:
-                img.setImageResource(R.drawable.disco);
-                break;
+        Integer[] x=cat.getSingleCategoriesFromValue(locale.getCategory());
+
+        int c=0;
+        for(int i=0;i<x.length;i++){
+            c+=x[i];
+        }
+
+        switch(c){
             case 1:
-                img.setImageResource(R.drawable.enoteca);
+                img.setImageResource(R.drawable.ic_local_bar_black_24dp);
+
                 break;
             case 2:
-                img.setImageResource(R.drawable.ic_local_bar_black_24dp);
-                break;
-            case 3:
                 img.setImageResource(R.drawable.pub);
                 break;
+            case 8:
+                img.setImageResource(R.drawable.enoteca);
+                break;
+            case 4:
+                img.setImageResource(R.drawable.disco);
+                break;
 
 
-        }*/
+        }
 
         v.setTag(locale);
         return v;

@@ -74,7 +74,7 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
              lista_recensione.setVisibility(View.INVISIBLE);
              tvNonVoto2.setVisibility(View.VISIBLE);
          }else{
-             CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,recensioni);
+             CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,recensioni,t.getImei());
              lista_recensione.setAdapter(customAdapterRecensione1);
          }
 
@@ -91,7 +91,12 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
             }
         });
     }
-
+    public void modificaMyReview(View v){
+        Intent i=new Intent(v.getContext(),EditRecensione.class);
+        i.putExtra("recensione",(Recensione)v.getTag());
+        i.putExtra("utente",t);
+        startActivity(i);
+    }
     @Override
     public boolean onMarkerClick(Marker marker) {
         return false;

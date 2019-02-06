@@ -55,6 +55,8 @@ public class EditRecensione extends AppCompatActivity {
                 nomeLocale.setText(l.getNome());
                 viaLocale.setText(l.getVia());
             } else if(recensione!=null){
+                nomeLocale.setText(l.getNome());
+                viaLocale.setText(l.getVia());
                 titolo.setText(recensione.getTesto());
                 testoR.setText(recensione.getTesto());
                 votoQP.setRating(recensione.getVotoQP());
