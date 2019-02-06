@@ -1,19 +1,19 @@
-package com.example.nello.youthclub;
+package it.youthclub.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.example.nello.youthclub.R;
 
 import it.youthclub.beans.Utente;
 
 public class Ricerca_nome extends AppCompatActivity {
     private EditText editText;
-    private CheckBox cb1,cb2,cb3,cb4;
     private ImageView cerca;
     private Utente user;
     @Override

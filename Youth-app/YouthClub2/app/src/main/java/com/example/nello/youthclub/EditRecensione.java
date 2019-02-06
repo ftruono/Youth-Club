@@ -1,26 +1,35 @@
 package com.example.nello.youthclub;
 
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import it.youthclub.activity.MainActivity;
+import it.youthclub.beans.Categoria;
+import it.youthclub.beans.Locale;
 import it.youthclub.beans.Recensione;
 import it.youthclub.beans.Utente;
 
+
 public class EditRecensione extends AppCompatActivity {
     private Utente t;
-    private int localeID;
-    private Recensione recensione=null;
+    private Locale l;
+    private Recensione recensione;
+    private Categoria c;
+
+
     private TextView nomeLocale,viaLocale;
     private EditText titolo,testoR;
-    private RatingBar votoT,votoQP,votoS,votoC;// float voto int votoServizio int votoQP int votoCibo;
-    private boolean scrivi=true;//true=scrivi false=modifica
+    private RatingBar votoQP,votoS,votoC;// float voto int votoServizio int votoQP int votoCibo;
+    private ImageView logo;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,30 +37,34 @@ public class EditRecensione extends AppCompatActivity {
 
         nomeLocale = findViewById(R.id.nome_locale);
         viaLocale = findViewById(R.id.via_locale);
-        votoT = findViewById(R.id.VotoComplessivo);
         votoQP = findViewById(R.id.VotoQP);
         votoS = findViewById(R.id.VotoServizio);
         votoC = findViewById(R.id.VotocCibo);
         titolo = findViewById(R.id.editTextNomeRecensione);
         testoR = findViewById(R.id.editTextTestoRecensione);
-
+        logo=findViewById(R.id.logo_locale);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             t= (Utente) extras.getSerializable("utente");
-            localeID = extras.getInt("id_locale");
-            nomeLocale.setText(extras.getString("nomelocale"));
-            viaLocale.setText(extras.getString("via"));
+            l = (Locale) extras.getSerializable("locale");
+            recensione=(Recensione) extras.getSerializable("recensione");
 
-            if (scrivi = extras.getBoolean("valoreRec")) {
-                recensione = (Recensione) extras.getSerializable("recensione");
+
+            if(l!=null){
+                nomeLocale.setText(l.getNome());
+                viaLocale.setText(l.getVia());
+            } else if(recensione!=null){
                 titolo.setText(recensione.getTesto());
                 testoR.setText(recensione.getTesto());
-                votoT.setRating(recensione.getVoto());
                 votoQP.setRating(recensione.getVotoQP());
                 votoS.setRating(recensione.getVotoServizio());
                 votoC.setRating(recensione.getVotoCibo());
             }
+
+            logo.setImageResource(R.drawable.disco);
+        //    Integer[] cat= c.getSingleCategoriesFromValue(extras.getInt("categoria"));
+
         }
     }
 
@@ -65,19 +78,21 @@ public class EditRecensione extends AppCompatActivity {
 
         if(titolo.getText().length()==0) {
             Toast.makeText(this, "Scrivere un titolo alla recensione", Toast.LENGTH_SHORT).show();
+            }else if(testoR.getText().length()==0) {
+                Toast.makeText(this, "Scrivere un testo alla recensione", Toast.LENGTH_SHORT).show();
+                 } else {
+                    //URL ulr=new URL("http://10.0.0.2:8080/index.jsp?review=add&account="+id+"&testo="+testoR+"&titolo="+titolo+"&votoServizio="+votoS+"&votoQP="+votoQP+"&votoCibo="+votoC+"&idLocale="+localeID);
+                    ClientRequest clientRequest = new ClientRequest(t);
+                    if(l!=null){
+                        int i=clientRequest.addReview(testoR.getText().toString(), titolo.getText().toString(), votoSi, votoQPi, votoCi, l.getID());
+                    }else {
+                        clientRequest.editReview(recensione.getId(),recensione.getLocaleID(),testoR.getText().toString(),titolo.getText().toString(),votoSi, votoQPi, votoCi,recensione.getVoto());
+                    }
 
-        }else if(testoR.getText().length()==0) {
-            Toast.makeText(this, "Scrivere un testo alla recensione", Toast.LENGTH_SHORT).show();
-
-        } else {
-            //URL ulr=new URL("http://10.0.0.2:8080/index.jsp?review=add&account="+id+"&testo="+testoR+"&titolo="+titolo+"&votoServizio="+votoS+"&votoQP="+votoQP+"&votoCibo="+votoC+"&idLocale="+localeID);
-
-            ClientRequest clientRequest = new ClientRequest(t);
-            clientRequest.addReview(testoR.getText().toString(), titolo.getText().toString(), votoSi, votoQPi, votoCi, localeID);
-
-
-        }
-            Toast.makeText(this, "recensione iniviata", Toast.LENGTH_SHORT).show();
+                }
+                    Toast.makeText(this, "recensione iniviata", Toast.LENGTH_SHORT).show();
+                    Intent i=new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(i);
 
         }
     }

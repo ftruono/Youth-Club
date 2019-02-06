@@ -1,11 +1,9 @@
-package com.example.nello.youthclub;
+package it.youthclub.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,14 +11,13 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.security.Permission;
+import com.example.nello.youthclub.R;
 
 import it.youthclub.beans.Utente;
 
@@ -36,7 +33,6 @@ public class Ricerca_localita extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ricerca_localita);
         editText = findViewById(R.id.edit);
@@ -46,6 +42,8 @@ public class Ricerca_localita extends AppCompatActivity {
         cb4 = findViewById(R.id.discoteche);
         cerca = findViewById(R.id.img_searchl);
         gps = findViewById(R.id.img_gps);
+
+        //Si fa passare dalla homepage i dati dell'utente
         Bundle exstras=getIntent().getExtras();
         if(exstras!=null){
             t=(Utente)exstras.getSerializable("utente");
@@ -63,13 +61,16 @@ public class Ricerca_localita extends AppCompatActivity {
         cerca.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(categoria==0){
+                    Toast.makeText(getApplicationContext(),"Si prega di selezionare una categoria prima di procedere",Toast.LENGTH_LONG).show();
+                }else{
+                    Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
+                    i.putExtra("luogo", editText.getText().toString());
+                    i.putExtra("categoria", categoria);
+                    i.putExtra("utente",t);
+                    startActivity(i);
+                }
 
-                Intent i = new Intent(getApplicationContext(), Mappa_lista.class);
-
-                i.putExtra("luogo", editText.getText().toString());
-                i.putExtra("categoria", categoria);
-                i.putExtra("utente",t);
-                startActivity(i);
             }
         });
 
@@ -93,8 +94,6 @@ public class Ricerca_localita extends AppCompatActivity {
                     categoria +=1;
                 else
                     categoria -=1;
-
-
             }
         });
         cb3.setOnClickListener(new View.OnClickListener() {

@@ -11,11 +11,14 @@ import android.widget.TextView;
 import com.example.nello.youthclub.R;
 
 import java.util.List;
+import java.util.Random;
 
+import it.youthclub.beans.Categoria;
 import it.youthclub.beans.Locale;
 
 public class LocaliAdpter extends ArrayAdapter<Locale> {
     private LayoutInflater inflater;
+    private Categoria cat;
     private Locale locale;
     private TextView nome,via;
     private ImageView img;
@@ -29,7 +32,27 @@ public class LocaliAdpter extends ArrayAdapter<Locale> {
         locale=getItem(position);
         nome.setText(locale.getNome());
         via.setText(locale.getVia());
-        img.setImageResource(R.drawable.ic_audiotrack);
+
+        /*Integer[] x=cat.getSingleCategoriesFromValue(locale.getCategory());
+        Random r=new Random(x.length-1);
+        int value=r.nextInt();
+        switch(value){
+            case 0:
+                img.setImageResource(R.drawable.disco);
+                break;
+            case 1:
+                img.setImageResource(R.drawable.enoteca);
+                break;
+            case 2:
+                img.setImageResource(R.drawable.ic_local_bar_black_24dp);
+                break;
+            case 3:
+                img.setImageResource(R.drawable.pub);
+                break;
+
+
+        }*/
+
         v.setTag(locale);
         return v;
     }

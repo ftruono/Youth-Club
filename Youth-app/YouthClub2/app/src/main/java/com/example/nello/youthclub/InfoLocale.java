@@ -18,15 +18,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import it.youthclub.adapters.CustomAdapterRecensione1;
+import it.youthclub.beans.Categoria;
 import it.youthclub.beans.Locale;
 import it.youthclub.beans.Recensione;
 import it.youthclub.beans.Utente;
 
 public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
     private Locale locale;
-    private TextView textViewnomeloclae,tvvia,tvNumeroTelefono;
+    private TextView textViewnomeloclae,tvvia,tvNumeroTelefono,tvNonVoto1,tvNonVoto2;
     private ListView lista_recensione;
     private Utente t;
     private RatingBar tvtotalevoti;
@@ -44,9 +46,11 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
         tvvia=findViewById(R.id.via);
         tvNumeroTelefono=findViewById(R.id.numeroTelefono);
         tvtotalevoti=findViewById(R.id.ratingBar);
+        tvtotalevoti.setClickable(false);
         lista_recensione=findViewById(R.id.lista_recensione);
         scrivi=findViewById(R.id.writereview);
-
+        tvNonVoto1=findViewById(R.id.TextNonVoto1);
+        tvNonVoto2=findViewById(R.id.TextNonVoto2);
 
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
@@ -54,17 +58,25 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
             locale= (Locale) extras.getSerializable("locale");
         }
         textViewnomeloclae.setText(locale.getNome());
-        tvtotalevoti.setRating(locale.getMediaVoto());
+        if(locale.getMediaVoto()==0){
+            tvtotalevoti.setVisibility(View.INVISIBLE);
+            tvNonVoto1.setVisibility(View.VISIBLE);
+        }else{
+            tvtotalevoti.setRating(locale.getMediaVoto());
+        }
         tvNumeroTelefono.setText(locale.getPhone());
         tvvia.setText(locale.getVia());
 
-        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,new ArrayList<Recensione>());
-        lista_recensione.setAdapter(customAdapterRecensione1);
-        //TODO da sostituire con le vere recensioni
-        for(int i=0;i<20;i++){
-            Recensione recensione =new Recensione(i,"x",0,"xx","yy",1,2,3,4);
-            customAdapterRecensione1.add(recensione);
-        }
+
+
+         List<Recensione> recensioni=locale.getRecensioni();
+         if(recensioni.size()==0){
+             lista_recensione.setVisibility(View.INVISIBLE);
+             tvNonVoto2.setVisibility(View.VISIBLE);
+         }else{
+             CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,recensioni);
+             lista_recensione.setAdapter(customAdapterRecensione1);
+         }
 
 
 
@@ -73,9 +85,8 @@ public class InfoLocale extends AppCompatActivity implements OnMapReadyCallback,
             public void onClick(View v) {
                 Intent i=new Intent(getApplicationContext(),EditRecensione.class);
                 i.putExtra("utente",t);
-                i.putExtra("id_locale",locale.getPlaceID());
-                i.putExtra("nomelocale",locale.getNome());
-                i.putExtra("via",locale.getVia());
+                i.putExtra("locale",locale);
+
                 startActivity(i);
             }
         });

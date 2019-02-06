@@ -22,8 +22,6 @@ import android.widget.Toast;
 import com.example.nello.youthclub.ClientRequest;
 import com.example.nello.youthclub.MyReview;
 import com.example.nello.youthclub.R;
-import com.example.nello.youthclub.Ricerca_localita;
-import com.example.nello.youthclub.Ricerca_nome;
 
 import it.youthclub.beans.Utente;
 

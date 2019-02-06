@@ -17,11 +17,13 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
     <RelativeLayout
         android:id="@+id/dati"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/map">
+        android:layout_below="@+id/map"
+        android:layout_marginLeft="5dp">
         <TextView
             android:id="@+id/mediavoti"
             android:layout_width="wrap_content"
@@ -32,8 +34,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/mediavoti"
-            android:numStars="5"
-            android:stepSize="0.5" />
+            android:numStars="5"/>
+        <TextView
+            android:id="@+id/TextNonVoto1"
+            android:layout_below="@+id/mediavoti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ancora non ha ricevuto recensioni"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:visibility="invisible"/>
         <TextView
             android:id="@+id/nome"
             android:layout_width="wrap_content"
@@ -61,10 +71,21 @@
 
 
 
-    <ListView
-        android:id="@+id/lista_recensione"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/writereview"></ListView>
+        <ListView
+            android:id="@+id/lista_recensione"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/writereview"></ListView>
+        <TextView
+            android:id="@+id/TextNonVoto2"
+            android:layout_below="@+id/writereview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ancora non ha ricevuto recensioni"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:visibility="invisible"/>
+
+
     </RelativeLayout>
 </RelativeLayout>

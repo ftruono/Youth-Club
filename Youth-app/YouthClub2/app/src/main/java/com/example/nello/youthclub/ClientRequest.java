@@ -124,7 +124,7 @@ public class ClientRequest  {
 
         try {
             JSONObject o=t1.get();
-            return decodReview(t1.get());
+            return decodeJSONReview(t1.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -192,8 +192,9 @@ public class ClientRequest  {
                 rec.setTesto(recJSON.getString("testo"));
                 rec.setTitoloRecensione(recJSON.getString("titoloRecensione"));
                 rec.setVoto(Float.parseFloat(recJSON.getString("voto")));
-                rec.setVoto(Float.parseFloat(recJSON.getString("votoQP")));
-                rec.setVoto(Float.parseFloat(recJSON.getString("votoCibo")));
+                rec.setVotoQP(Integer.parseInt(recJSON.getString("votoQP")));
+                rec.setVotoCibo(Integer.parseInt(recJSON.getString("votoCibo")));
+                rec.setVotoServizio(Integer.parseInt(recJSON.getString("votoService")));
                 list.add(rec);
 
             }
@@ -251,7 +252,7 @@ public class ClientRequest  {
                         r.setVoto(Float.parseFloat(recensione.getString("voto")));
                         r.setVotoServizio(Integer.parseInt(recensione.getString("votoService")));
                         r.setVotoQP(Integer.parseInt(recensione.getString("votoQP")));
-                        r.setVotoCibo(Integer.parseInt(recensione.getString("VotoCibo")));
+                        r.setVotoCibo(Integer.parseInt(recensione.getString("votoCibo")));
                         l.addReview(r);
                     }
                 loc.add(l);
@@ -264,23 +265,6 @@ public class ClientRequest  {
         return null;
 
     }
-
-    public int decodReview(JSONObject obj){
-        try {
-            JSONArray results=obj.getJSONArray("response");
-            for(int i=0;i<results.length();++i) {
-                JSONObject risposta=results.getJSONObject(i);
-               return risposta.getInt("code");
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
-
-
-
 
 
 

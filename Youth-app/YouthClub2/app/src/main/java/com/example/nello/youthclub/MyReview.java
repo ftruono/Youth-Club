@@ -1,5 +1,6 @@
 package com.example.nello.youthclub;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ import it.youthclub.beans.Utente;
 public class MyReview extends AppCompatActivity {
     private ListView lista;
     private Utente user;
+    private List<Recensione> rec;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,17 +28,22 @@ public class MyReview extends AppCompatActivity {
         if(extras!=null){
             user=(Utente)extras.getSerializable("utente");
         }
+
+
         ClientRequest req=new ClientRequest(user);
-        List<Recensione> rec=req.getReviewsByAccount();
+        rec=req.getReviewsByAccount();
         CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,rec);
         lista.setAdapter(customAdapterRecensione1);
-        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                //TODO : apre la modifica
-            }
-        });
+
 
 
     }
+
+    public void modificaMyReview(View v){
+        Intent i=new Intent(v.getContext(),EditRecensione.class);
+        i.putExtra("recensione",(Recensione)v.getTag());
+        i.putExtra("utente",user);
+        startActivity(i);
+    }
+
 }

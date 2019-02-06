@@ -37,9 +37,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Ricerca_localita" />
-        <activity android:name=".Ricerca_nome" />
-        <activity android:name=".Mappa_lista" />
+        <activity android:name="it.youthclub.activity.Ricerca_localita" />
+        <activity android:name="it.youthclub.activity.Ricerca_nome" />
+        <activity android:name="it.youthclub.activity.Mappa_lista" />
         <activity android:name="it.youthclub.activity.ProfileActivity" />
         <activity android:name=".Splash" />
         <activity android:name=".InfoLocale" />
