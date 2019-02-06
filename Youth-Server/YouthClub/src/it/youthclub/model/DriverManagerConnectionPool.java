@@ -25,7 +25,7 @@ private static List<Connection> freeDbConnections;
 			String port = "3306";
 			String db = "youth_club";
 			String username = "root";
-			String password = "Nello1997_X";
+			String password = "";
 
 			newConnection = DriverManager.getConnection("jdbc:mysql://"+ ip+":"+ port+"/"+db +"?zeroDateTimeBehavior=convertToNull", username, password);
            

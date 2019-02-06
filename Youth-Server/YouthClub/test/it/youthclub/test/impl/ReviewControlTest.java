@@ -14,42 +14,33 @@ import it.youthclub.model.recensioni.RecensioneDM;
 
 class ReviewControlTest {
 	
-	ArrayList<Recensione> s;
-	RecensioneDM dm;
-	ReviewControl r;
+	private ArrayList<Recensione> s;
+	private ReviewControl r;
 	
-	private static int idT;
-	private static int localeIDT;
-	private String testoT;
-	private String titoloT;
-	private static int votoQPT;
-	private static int votoST;
-	private static int votoCiboT;
-	private static float oldVoteT;
+	private int idT;
+	private int localeID;
+	private String account;
+	private String testo;
+	private String titolo;
+	private  int votoQP;
+	private  int votoS;
+	private  int votoCibo;
+	private  float oldVote;
 	
 	@BeforeEach
-	void setUp() throws Exception {
-		dm = new RecensioneDM();
-		
+	public void setUp() throws Exception {
+		System.out.println("call");
+		r=new ReviewControl();
+		account="358240051111110";
 		idT = 3596400;
-		localeIDT = 60;
-		testoT="ottima drink";
-		titoloT="Recensione Marzo";
-		votoQPT = 5;
-		votoST = 4;
-		votoCiboT = 5;
-		oldVoteT = 4;
+		localeID = 314;
+		testo="ottimo drink";
+		titolo="Recensione Marzo";
+		votoQP = 5;
+		votoS = 5;
+		votoCibo = 5;
+		oldVote = 5;
 
-	}
-	
-	/**
-	 * Testa il metodo di edit recensione sul database
-	 */
-	@Test
-	final void testEditRecensione() throws Exception {
-		boolean b = r.editRecensione(idT, localeIDT, testoT, titoloT, votoQPT, votoST, votoCiboT, oldVoteT);
-		assertEquals(true,b);
-		
 	}
 	
 	/**
@@ -57,9 +48,22 @@ class ReviewControlTest {
 	 */
 	@Test
 	final void testAddRecensione() throws Exception{
-		boolean b = r.addRecensione("rec1", localeIDT, testoT, titoloT, votoST, votoQPT, votoCiboT);
+		boolean b = r.addRecensione(account, localeID, testo, titolo, votoS, votoQP, votoCibo);
 		assertEquals(true,b);
 	}
+	
+	
+	/**
+	 * Testa il metodo di edit recensione sul database
+	 */
+	@Test
+	final void testEditRecensione() throws Exception {
+		boolean b = r.editRecensione(idT, localeID, testo, titolo, votoQP, votoS, votoCibo, oldVote);
+		assertEquals(true,b);
+		
+	}
+	
+	
 	
 	/**
 	 * Testa il metodo che ritorna una lista di recensioni in base

@@ -8,6 +8,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import it.youthclub.model.locali.Locale;
@@ -23,15 +24,21 @@ public class DataModelTesting {
 	private LocaleDM locDM=new LocaleDM();
 	private UserDM userDM=new UserDM();
 	private PlaceDM placeDM=new PlaceDM();
+	private Calendar cal;
 	
+	
+	@BeforeEach
+	public void before() {
+		cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, 01);
+	}
 	
 	/**
 	 * Test del metodo GetLocale che prendere come paramentro un oggeto place e una categoria
 	 */
 	@Test
-	private final void testGetLocale() {
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.MONTH, 01);
+	public final void testGetLocale() {
+		
 		List<Locale> l=locDM.getLocale(new Place(40.6791257f, 14.7550486f, "Salerno", cal.getTime()),8);
 		assertNotNull(l);
 	}
@@ -40,7 +47,7 @@ public class DataModelTesting {
 	 */
 	
 	@Test
-	private final void testAddReview() {
+	public final void testAddReview() {
 		locDM.addReviewLocale(new Recensione(3432432, 12, "servizio ottimo", "sono rimasto sodisfatto del servizio", 5, 5, 5));
 		assertNotNull(locDM);
 	}
@@ -51,7 +58,7 @@ public class DataModelTesting {
 	 * Test del metodo CreateUser che crea un utente e prende come parametro un oggetto Utente
 	 */
 	@Test
-	private final void testCreateUser() {
+	public final void testCreateUser() {
 		userDM.createUser(new Utente("Giacomo"));
 		assertNotNull(userDM);
 	}
@@ -59,7 +66,7 @@ public class DataModelTesting {
 	 * Test del metodo GeuUserById che prende come paramentro la stringa del id di un utente
 	 */
 	@Test
-	private final void testGetUserById() {
+	public final void testGetUserById() {
 		Utente t=userDM.getUserById("Giacomo");
 		assertNotNull(t);
 	}
@@ -67,7 +74,7 @@ public class DataModelTesting {
 	 * Test del metodo AddPlace che aggiugnge un place e prende come oggetto un Place
 	 */
 	@Test
-	private final void testAddPlace() {
+	public final void testAddPlace() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, 01);
 		Place p= placeDM.addPlace(new Place(40.6791257f, 14.7550486f, "Salerno",cal.getTime()));
@@ -77,7 +84,7 @@ public class DataModelTesting {
 	 * Test del metodo CheckIfExist contro se un place esiste e prende come parametri lat e lng 
 	 */
 	@Test
-	private final void testCheckIfExist() {
+	public final void testCheckIfExist() {
 		Place p=placeDM.CheckIfExist(40.6791257f, 14.7550486f);
 		assertNotNull(p);
 	}
@@ -85,7 +92,7 @@ public class DataModelTesting {
 	 * Test del metodo EditPlace che aggiorna un place e prende come un oggetto un Place
 	 */
 	@Test
-	private final void testEditPlace() {
+	public final void testEditPlace() {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, 01);
 		Place p=placeDM.editPlace(new Place(40.6791257f, 14.7550486f, "Salerno1",cal.getTime()));

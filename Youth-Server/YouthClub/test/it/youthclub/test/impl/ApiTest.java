@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,34 +20,42 @@ import it.youthclub.api.GoogleApi;
 import it.youthclub.api.YelpApi;
 import it.youthclub.model.locali.Locale;
 import it.youthclub.model.places.Place;
+import junit.framework.TestCase;
 
-class ApiTest {
+public class ApiTest {
 	
-	private FourSquareApi fr;
-	private GoogleApi ga;
-	private YelpApi y;
+	private FourSquareApi fr=new FourSquareApi();
+	private GoogleApi ga=new GoogleApi();
+	private YelpApi y=new YelpApi();
 	private Geocoding geo;
 	
 	List<Locale> loc;
 	Place pl;
 	
-	@BeforeClass
-	public void x() {
-		System.out.println("sono entrato! :)");
+	
+	
+    @BeforeClass
+	public static void initilizate() {
+		System.out.println("setup");
+		
 	}
 	
-	@Test
-	void setUp() throws Exception {
-		Date dateFormat = new Date("yyyy/MM/dd HH:mm:ss");
-		pl = new Place(41, 40.9280f, 14.7942f, "Salerno", dateFormat);
-	}
 	
-	/**
+	
+    @BeforeEach
+    public void before() {
+        Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.MONTH, 01);
+		pl = new Place(43, 40.9280f, 14.7942f, "Salerno", cal.getTime());
+    }
+    
+    /**
 	 * Test del metodo search per l'api FourSquare
 	 */
-	
+    
 	@Test
-	final void testSearchFourSquare() throws Exception{
+	public void testSearchFourSquare() throws Exception{
+		//before();
 		loc = fr.search(pl);
 		assertNotNull(loc);
 	}
@@ -56,7 +65,8 @@ class ApiTest {
 	 */
 	
 	@Test
-	final void testSearchGoogle() throws Exception{
+	public void testSearchGoogle() throws Exception{
+		//before();
 		loc = ga.search(pl);
 		assertNotNull(loc);
 	}
@@ -66,7 +76,8 @@ class ApiTest {
 	 */
 	
 	@Test
-	final void testSearchYelp() throws Exception{
+	public void testSearchYelp() throws Exception{
+		//before();
 		loc = y.search(pl);
 		assertNotNull(loc);
 	}
@@ -76,9 +87,10 @@ class ApiTest {
 	 */
 	
 	@Test
-	final void testGeocodingLatLong() throws Exception{
+	public void testGeocodingLatLong() throws Exception{
 		geo = new Geocoding(40.9280f, 14.7942f);
-		assertNotNull(geo);
+		Place p=geo.searchAndLearn();
+		assertNotNull(p);
 	}
 	
 	/**
@@ -86,26 +98,14 @@ class ApiTest {
 	 */
 	
 	@Test
-	final void testGeocodingLuogo() throws Exception{
+	public void testGeocodingLuogo() throws Exception{
 		geo = new Geocoding("Salerno");
-		assertNotNull(geo);
+		Place p=geo.searchAndLearn();
+		assertNotNull(p);
 	}
 	
-	/**
-	 * Test del metodo Search and Learn di Geocoding
-	 */
 	
-	@Test
-	final void testSearchAndLearn() {
-		Place pl1;
-		try {
-			pl1 = geo.searchAndLearn();
-			assertNotNull(pl1);
-			System.out.println(pl1.getID()+ "" +pl1.getLatitudine()+ "" +pl1.getLongitudine()+ "" +pl1.getName()+ "" +pl1.getStatus());
-		} catch (GeoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+	
+	
 
 }

@@ -38,7 +38,7 @@ class BeanTest {
 		int cat=3;
 		String fonteT="Google";
 		String id_apiT="b675a7affb57a712ed72a2c8493f9a55f601cbd2";
-		
+		loc=new Locale(fonteT);
 		loc.setID(idT);
 		loc.setIdApi(id_apiT);
 		loc.setFonte(fonteT);
@@ -67,7 +67,7 @@ class BeanTest {
 		float longiT = 14.7942f;
 		String nameT = "Salerno";
 		Date dateFormat = new Date("2019/02/05"); 
-		
+		plc=new Place(idT,latT,longiT,nameT,dateFormat);
 		plc.setID(idT);
 		plc.setLatitudine(latT);
 		plc.setLongitudine(longiT);
@@ -92,7 +92,7 @@ class BeanTest {
 		int votSer = 4;
 		int votQP = 4;
 		int votCb = 3; 
-		
+		rec=new Recensione();
 		rec.setAccountID(aID);
 		rec.setId(idT);
 		rec.setLocaleID(locID);
@@ -112,7 +112,7 @@ class BeanTest {
 	@Test
 	final void testBeanUtente() throws Exception {
 		String idT="User2";
-		
+		ut=new Utente(idT);
 		ut.setIdutente(idT);
 		
 		assertNotNull(ut);
