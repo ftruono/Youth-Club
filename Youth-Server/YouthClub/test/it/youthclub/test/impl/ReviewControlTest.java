@@ -45,6 +45,7 @@ class ReviewControlTest {
 	/**
 	 * Testa il metodo di edit recensione sul database
 	 */
+	@Test
 	final void testEditRecensione() throws Exception {
 		boolean b = r.editRecensione(idT, localeIDT, testoT, titoloT, votoQPT, votoST, votoCiboT, oldVoteT);
 		assertEquals(true,b);
@@ -54,6 +55,7 @@ class ReviewControlTest {
 	/**
 	 * Testa il metodo di aggiunta recensione
 	 */
+	@Test
 	final void testAddRecensione() throws Exception{
 		boolean b = r.addRecensione("rec1", localeIDT, testoT, titoloT, votoST, votoQPT, votoCiboT);
 		assertEquals(true,b);
@@ -64,6 +66,7 @@ class ReviewControlTest {
 	 * a un utente.
 	 * Lo testiamo su un utente che ha almeno una recensione
 	 */
+	@Test
 	final void testGetRecensioniByUser() throws Exception {
 		s = r.getRecensioniByUser("user1");
 		assertNotNull(s);

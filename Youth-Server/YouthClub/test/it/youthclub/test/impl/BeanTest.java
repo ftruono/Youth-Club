@@ -23,6 +23,7 @@ class BeanTest {
 	/**
 	 * Test Bean Locale
 	 */
+	@Test
 	final void testBeanLocale() throws Exception {
 		int idT=1;
 		int idP=20;
@@ -59,6 +60,7 @@ class BeanTest {
 	/**
 	 * Test Bean Place
 	 */
+	@Test
 	final void testBeanPlace() throws Exception {
 		int idT = 2;
 		float latT = 40.9280f;
@@ -79,6 +81,7 @@ class BeanTest {
 	/**
 	 * Test Bean Recensione
 	 */
+	@Test
 	final void testBeanRecensione() throws Exception {
 		int idT = 1;
 		String aID="ac1";
@@ -106,6 +109,7 @@ class BeanTest {
 	/**
 	 * Test Bean Utente
 	 */
+	@Test
 	final void testBeanUtente() throws Exception {
 		String idT="User2";
 		

@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +30,12 @@ class ApiTest {
 	List<Locale> loc;
 	Place pl;
 	
+	@BeforeClass
+	public void x() {
+		System.out.println("sono entrato! :)");
+	}
 	
+	@Test
 	void setUp() throws Exception {
 		Date dateFormat = new Date("yyyy/MM/dd HH:mm:ss");
 		pl = new Place(41, 40.9280f, 14.7942f, "Salerno", dateFormat);
@@ -39,6 +45,7 @@ class ApiTest {
 	 * Test del metodo search per l'api FourSquare
 	 */
 	
+	@Test
 	final void testSearchFourSquare() throws Exception{
 		loc = fr.search(pl);
 		assertNotNull(loc);
@@ -48,6 +55,7 @@ class ApiTest {
 	 * Test del metodo search per l'api Google
 	 */
 	
+	@Test
 	final void testSearchGoogle() throws Exception{
 		loc = ga.search(pl);
 		assertNotNull(loc);
@@ -57,6 +65,7 @@ class ApiTest {
 	 * Test del metodo search per l'api Yelp
 	 */
 	
+	@Test
 	final void testSearchYelp() throws Exception{
 		loc = y.search(pl);
 		assertNotNull(loc);
@@ -66,6 +75,7 @@ class ApiTest {
 	 * Test del metodo search per Geocoding con parametri latitudine e longitudine
 	 */
 	
+	@Test
 	final void testGeocodingLatLong() throws Exception{
 		geo = new Geocoding(40.9280f, 14.7942f);
 		assertNotNull(geo);
@@ -75,6 +85,7 @@ class ApiTest {
 	 * Test del metodo search per Geocoding con il luogo
 	 */
 	
+	@Test
 	final void testGeocodingLuogo() throws Exception{
 		geo = new Geocoding("Salerno");
 		assertNotNull(geo);
@@ -84,6 +95,7 @@ class ApiTest {
 	 * Test del metodo Search and Learn di Geocoding
 	 */
 	
+	@Test
 	final void testSearchAndLearn() {
 		Place pl1;
 		try {

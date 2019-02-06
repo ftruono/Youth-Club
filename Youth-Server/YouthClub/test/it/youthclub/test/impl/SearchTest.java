@@ -18,6 +18,7 @@ class SearchTest {
 	/**
 	 * Test per il metodo di ricerca con nome
 	 */
+	@Test
 	final void testSearchName() throws Exception{
 		controller = new SearchController("Madegra,Salerno");
 		assertNotNull(controller);
@@ -28,6 +29,7 @@ class SearchTest {
 	/**
 	 * Test per il metodo di ricerca con luogo
 	 */
+	@Test
 	final void testSearchLuogo() throws Exception{
 		controller = new SearchController("Salerno",1,true);
 		assertNotNull(controller);
@@ -38,6 +40,7 @@ class SearchTest {
 	/**
 	 * Test per il metodo di ricerca con gps
 	 */
+	@Test
 	final void testSearchGps() throws Exception{
 		controller = new SearchController("40.9280,14.7942",1,false);
 		assertNotNull(controller);
