@@ -1,13 +1,19 @@
-package com.example.nello.youthclub;
+package it.youthclub.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class profile extends AppCompatActivity {
+import com.example.nello.youthclub.R;
+
+import it.youthclub.beans.Utente;
+
+public class ProfileActivity extends AppCompatActivity {
     private ImageView img_profile;
-    private TextView name,telefono,email;
+    private TextView name,telefono;
+    private Utente t;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -15,11 +21,15 @@ public class profile extends AppCompatActivity {
 
         name=findViewById(R.id.my_name);
         telefono=findViewById(R.id.my_phone);
-        email=findViewById(R.id.my_email);
+        Bundle d=getIntent().getExtras();
+        if(d!=null){
+            t=(Utente)d.getSerializable("utente");
 
-        name.setText("Vincenzo liguorino");
-        telefono.setText("3333176760");
-        email.setText("petro@gmail.com");
+        }
+
+        name.setText(t.getImei());
+        telefono.setText(t.getJSESSION());
+
     }
 
 

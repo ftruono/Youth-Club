@@ -19,7 +19,6 @@ public class UserDM implements Utentable{
 			PreparedStatement prep=conn.prepareStatement("INSERT INTO account (ID) VALUES (?)");
 			prep.setString(1, t.getIdutente());
 			prep.executeUpdate();
-			conn.commit();
 			prep.close();
 			DriverManagerConnectionPool.releaseConnection(conn);
 		} catch (SQLException e) {

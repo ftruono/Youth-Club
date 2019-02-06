@@ -2,15 +2,20 @@ package com.example.nello.youthclub;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import it.youthclub.adapters.CustomAdapterRecensione1;
 import it.youthclub.beans.Recensione;
+import it.youthclub.beans.Utente;
 
 public class MyReview extends AppCompatActivity {
     private ListView lista;
-    private String imei;
+    private Utente user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,15 +24,19 @@ public class MyReview extends AppCompatActivity {
         lista=findViewById(R.id.lista_tue_recensioni);
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
-            imei=extras.getString("imei");
+            user=(Utente)extras.getSerializable("utente");
         }
-
-        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,new ArrayList<Recensione>());
+        ClientRequest req=new ClientRequest(user);
+        List<Recensione> rec=req.getReviewsByAccount();
+        CustomAdapterRecensione1 customAdapterRecensione1=new CustomAdapterRecensione1(this,R.layout.layout_recensione,rec);
         lista.setAdapter(customAdapterRecensione1);
-        //TODO da sostituire con le vere recensioni
-        for(int i=0;i<20;i++){
-            Recensione beanRecensione=new Recensione(i,"x",0,"xx","yy",1,2,3,4);
-            customAdapterRecensione1.add(beanRecensione);
-        }
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //TODO : apre la modifica
+            }
+        });
+
+
     }
 }

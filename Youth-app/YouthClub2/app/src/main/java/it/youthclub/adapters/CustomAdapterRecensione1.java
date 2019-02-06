@@ -1,4 +1,4 @@
-package com.example.nello.youthclub;
+package it.youthclub.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+
+import com.example.nello.youthclub.R;
 
 import java.util.List;
 

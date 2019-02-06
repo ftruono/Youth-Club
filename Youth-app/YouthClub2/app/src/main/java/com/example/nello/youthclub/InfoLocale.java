@@ -19,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 
+import it.youthclub.adapters.CustomAdapterRecensione1;
 import it.youthclub.beans.Locale;
 import it.youthclub.beans.Recensione;
 import it.youthclub.beans.Utente;

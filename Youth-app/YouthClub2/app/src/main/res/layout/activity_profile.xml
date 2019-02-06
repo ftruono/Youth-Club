@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profile">
+    tools:context="it.youthclub.activity.ProfileActivity">
 
     <ImageView
         android:id="@+id/img_my_profile"
@@ -22,7 +22,7 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="103dp"
+        android:layout_marginBottom="200dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -34,37 +34,15 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_person_black_24dp" />
+                android:src="@drawable/ic_tv_light" />
 
             <TextView
+                android:id="@+id/my_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:text="Nome Cognome"
-                android:textStyle="bold"
-                android:id="@+id/my_name"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:orientation="horizontal"
-            android:paddingLeft="25dp">
-
-            <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_local_phone_black_24dp" />
-
-            <TextView
-                android:id="@+id/my_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:paddingLeft="20dp"
-                android:text="+266 225 225"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -78,15 +56,15 @@
             <ImageView
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_email_black_24dp" />
+                android:src="@drawable/cast_abc_scrubber_control_off_mtrl_alpha" />
 
             <TextView
-                android:id="@+id/my_email"
+                android:id="@+id/my_phone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="20dp"
-                android:text="email@gmail.com"
+                android:text="+266 225 225"
                 android:textStyle="bold" />
         </LinearLayout>
 

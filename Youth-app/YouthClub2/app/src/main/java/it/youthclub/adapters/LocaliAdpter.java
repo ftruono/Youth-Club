@@ -1,4 +1,4 @@
-package com.example.nello.youthclub;
+package it.youthclub.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,11 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.nello.youthclub.R;
+
 import java.util.List;
 
 import it.youthclub.beans.Locale;
 
-public class CustomAdapter1 extends ArrayAdapter<Locale> {
+public class LocaliAdpter extends ArrayAdapter<Locale> {
     private LayoutInflater inflater;
     private Locale locale;
     private TextView nome,via;
@@ -33,7 +35,7 @@ public class CustomAdapter1 extends ArrayAdapter<Locale> {
     }
 
 
-    public  CustomAdapter1(Context context, int resource, List<Locale> objects){
+    public LocaliAdpter(Context context, int resource, List<Locale> objects){
         super(context, resource,objects);
         inflater=LayoutInflater.from(context);
     }

@@ -29,7 +29,7 @@ import it.youthclub.processing.Task;
 public class ClientRequest  {
 
     private Utente user;
-
+    private static final String LINK="http://10.0.2.2:8080/YouthClub/index.jsp?";
 
     public ClientRequest(Utente t) {
         this.user=t;
@@ -41,7 +41,7 @@ public class ClientRequest  {
     public void autenticator(){
         try {
 
-            URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?auth="+ user.getImei());
+            URL url = new URL(LINK + "auth="+ user.getImei());
             // http://localhost:8080//YouthClub/
 
             Task tsk=new Task(Task.Operation.AUTENTICAZIONE,"GET",user);
@@ -53,10 +53,10 @@ public class ClientRequest  {
     }
 
     //paese o coordinate gps
-    public List<Locale>  search(final String luogo, final int cat, int mod) {//0 GPS 1 string
+    public List<Locale>  search(final String luogo, final int cat) {//0 GPS 1 string
         try {
              List<Locale> locali=new ArrayList<>();
-             URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?search="+luogo+"&mode=1&cat="+cat);
+             URL url = new URL(LINK + "search="+luogo+"&mode=1&cat="+cat);
              // http://localhost:8080//YouthClub/
             Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"GET",user);
             t1.execute(url);
@@ -68,14 +68,15 @@ public class ClientRequest  {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        Log.d("erroryouth","sto dando null");
         return null;
 
     }
 
     //Ricerca usando latidune e logitudine del gps
-    public List<Locale> search(Float lat, Float lng, int cat, int mod){//0 gps 1 string
+    public List<Locale> search(Float lat, Float lng, int cat){
         try {
-             URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?search="+lat+","+lng+"&cat="+cat+"&mode=1");
+             URL url = new URL(LINK + "search="+lat+","+lng+"&cat="+cat+"&mode=1");
              Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"GET",user);
              t1.execute(url);
              return decodeJSON(t1.get());
@@ -90,11 +91,11 @@ public class ClientRequest  {
         return null;
     }
 
-    public List<Locale> search(String luogo, int mod){
+    public List<Locale> search(String name){
         //URL http://youthclub.ddns.net:8080/index.jsp?name=[ricerca]
         try {
-            if (!luogo.contains(",")) return null;
-            URL url = new URL("http://10.0.2.2:8080/YouthClub/index.jsp?name="+luogo);
+            if (!name.contains(",")) return null;
+            URL url = new URL(LINK + "name="+name);
             Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"GET",user);
             t1.execute(url);
             return decodeJSON(t1.get());
@@ -108,11 +109,11 @@ public class ClientRequest  {
         return null;
     }
 
-    public int addReview(String account,String testo,String titolo,int votoS,int votoQP,int votoCibo,int idL){
+    public int addReview(String testo,String titolo,int votoS,int votoQP,int votoCibo,int idL){
 
         URL url= null;
         try {
-            url = new URL("http://10.0.0.2:8080/index.jsp?review=add&account=" + account + "&testo=" + testo +
+            url = new URL(LINK +"review=add&account=" + user.getImei() + "&testo=" + testo +
             "&titolo=" + titolo + "&votoServizio=" +  votoS + "&votoQP=" + votoQP + "&votoCibo=" + votoCibo + "&idLocale=" + idL);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -121,11 +122,9 @@ public class ClientRequest  {
         Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
          t1.execute(url);
 
-        try { JSONObject o=t1.get();
-
-
-            int x=decodReview(t1.get());
-            return x;
+        try {
+            JSONObject o=t1.get();
+            return decodReview(t1.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -134,17 +133,18 @@ public class ClientRequest  {
         return -1;
     }
 
-    public int editReview(int id,int idL,String testo,String titolo,int votoS,int votoQP,int votoCibo,float oldVote){
+    public synchronized int editReview(int id,int idL,String testo,String titolo,int votoS,int votoQP,int votoCibo,float oldVote){
         URL url= null;
         try {
-            url = new URL("http://10.0.0.2:8080/index.jsp?review=edit&id=" + id + "&testo=" + testo +
-                    "&titolo=" + titolo + "&votoServizio=" +  votoS + "&votoQP=" + votoQP + "&votoCibo=" + votoCibo + "&idLocale=" + idL );
+            url = new URL(LINK +"review=edit&id=" + id + "&testo=" + testo +
+                    "&titolo=" + titolo + "&votoServizio=" +  votoS + "&votoQP=" + votoQP + "&votoCibo=" + votoCibo + "&idLocale=" + idL + "&old=" + oldVote);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
         t1.execute(url);
+
         try {
             return decodeJSONReview(t1.get());
         } catch (InterruptedException e) {
@@ -159,25 +159,54 @@ public class ClientRequest  {
 
         URL url= null;
         try {
-            url = new URL("http://10.0.0.2:8080/index.jsp?review=get&account=" + user.getImei());
+            url = new URL(LINK+"review=get&account=" + user.getImei());
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
         Task t1=new Task(Task.Operation.RICERCA_RECENSIONE,"POST",user);
         t1.execute(url);
+
         try {
-            t1.get();
+           return decodeJSONReviews(t1.get());
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
 
-        return null; //TODO scrivere il rispettivo metodo di decode!
+        return null;
     }
 
+    private List<Recensione> decodeJSONReviews(JSONObject obj){
+        JSONArray results= null;
+        ArrayList<Recensione> list=new ArrayList<>();
+        try {
+            results = obj.getJSONArray("results");
+            for(int i=0;i<results.length();++i){
+                Recensione rec=new Recensione();
+                JSONObject recJSON=results.getJSONObject(i);
+                rec.setId(recJSON.getInt("id"));
+                rec.setLocaleID(recJSON.getInt("localeID"));
+                rec.setAccountID(recJSON.getString("accountID"));
+                rec.setTesto(recJSON.getString("testo"));
+                rec.setTitoloRecensione(recJSON.getString("titoloRecensione"));
+                rec.setVoto(Float.parseFloat(recJSON.getString("voto")));
+                rec.setVoto(Float.parseFloat(recJSON.getString("votoQP")));
+                rec.setVoto(Float.parseFloat(recJSON.getString("votoCibo")));
+                list.add(rec);
 
+            }
+            return list;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+      return null;
+    }
 
 
    private int decodeJSONReview(JSONObject obj){
@@ -188,7 +217,7 @@ public class ClientRequest  {
 
        }
 
-       return 0;
+       return -1;
    }
 
     private List<Locale> decodeJSON(JSONObject obj) {
@@ -203,9 +232,9 @@ public class ClientRequest  {
                 l.setPlaceID(locale.getInt("id_place"));
                 l.setCategory(locale.getInt("categoria"));
                 l.setPhone(locale.getString("numero_cellulare"));
-                l.setMediaVoto(locale.getLong("voto"));
-                l.setLongitudine(locale.getLong("lng"));
-                l.setLatitudine(locale.getLong("lat"));
+                l.setMediaVoto(Float.parseFloat(locale.getString("voto")));
+                l.setLongitudine(Float.parseFloat(locale.getString("lng")));
+                l.setLatitudine(Float.parseFloat(locale.getString("lat")));
                 l.setFonte(locale.getString("fonte"));
                 l.setNome(locale.getString("nome"));
                 l.setID(locale.getInt("id"));

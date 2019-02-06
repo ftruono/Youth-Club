@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,70 +21,54 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.youthclub.adapters.LocaliAdpter;
 import it.youthclub.beans.Locale;
 import it.youthclub.beans.Utente;
 
 public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, Serializable {
 
-    private String value=null, pulsanti[]=new String[4],imei;
     private ListView lista1;
     private Utente t;
+    private ClientRequest request;
     private List<Locale>risultati=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Retrieve the content view that renders the map.
         setContentView(R.layout.activity_mappa_lista);
-        // Get the SupportMapFragment and request notification when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         //Elementi passati
         Bundle extras=getIntent().getExtras();
         if(extras!=null){
-             t= (Utente) extras.getSerializable("utente");
-             ClientRequest clientRequest=new ClientRequest(t);
-             clientRequest.autenticator();
-            //0=ricerca per luogo 1=ricerca per gps 2=ricerca per nome
-             switch (extras.getInt("mod")){
-                 case 0:
-                     value=extras.getString("nome_locale");
-                     pulsanti=extras.getStringArray("tipi");
-                     risultati = clientRequest.search(value, 15,1);
-                     while (risultati==null){
-                         risultati = clientRequest.search(value, 15,1);
-                     }
-                     break;
-                 case 1:
-                     risultati=clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
-                     while (risultati==null){
-                         risultati = clientRequest.search(extras.getFloat("lat"),extras.getFloat("lng"), 15,2);
-                     }
-                     break;
-                 case 2:
-                     risultati =clientRequest.search(extras.getString("nome_locale"),3);
-                     while (risultati==null){
-                         risultati = clientRequest.search(extras.getString("nome_locale"),3);
-                     }
-                     break;
-             }
+            //TODO recupera le cose!
+            t=(Utente)extras.getSerializable("utente");
+            request=new ClientRequest(t);
+            int categoria=extras.getInt("categoria");
+            String luogo=extras.getString("luogo");
+            String name=extras.getString("nome_locale");
 
-        }
+            if(luogo==null){
+                    float lat = extras.getFloat("lat");
+                    float lng = extras.getFloat("lng");
+                    risultati = request.search(lat, lng, categoria);
+
+            }else
+                risultati=request.search(luogo,categoria);
+
+             if(name!=null)
+                 risultati=request.search(name);
+            }
+
+
 
         //Lista
         lista1=findViewById(R.id.lista1);
-        CustomAdapter1 customAdapter1=new CustomAdapter1(this,R.layout.activity_mappa_lista,new ArrayList<Locale>());
+        LocaliAdpter customAdapter1=new LocaliAdpter(this,R.layout.activity_mappa_lista,risultati);
         lista1.setAdapter(customAdapter1);
 
-        //aggiunge gli elementi alla lista
-        int x=risultati.size();
-        for(int i=0;i<x;i++){
-            Locale locale=risultati.get(i);
-            customAdapter1.add(locale);
 
-        }
         lista1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -128,5 +111,11 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
         // for the default behavior to occur (which is for the camera to move such that the
         // marker is centered and for the marker's info window to open, if it has one).
         return false;
+    }
+
+
+    private void typeSearch() {
+
+
     }
 }

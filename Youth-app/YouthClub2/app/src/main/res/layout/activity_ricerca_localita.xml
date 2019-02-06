@@ -18,10 +18,10 @@
 
     <EditText
         android:id="@+id/edit"
-        android:layout_width="294dp"
+        android:layout_width="238dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/testo"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/testo"
         android:layout_marginTop="68dp"
         android:hint="Scrivi qui la tua posizione"
         tools:layout_editor_absoluteX="0dp"
@@ -32,10 +32,9 @@
         android:id="@+id/img_searchl"
         android:layout_width="51dp"
         android:layout_height="48dp"
-        android:layout_below="@id/edit"
-        android:layout_alignStart="@+id/edit"
-        android:layout_marginStart="294dp"
-        android:layout_marginTop="-49dp"
+        android:layout_alignBottom="@+id/edit"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="60dp"
         app:srcCompat="@drawable/search_24dp"
         tools:layout_editor_absoluteX="351dp"
         tools:layout_editor_absoluteY="150dp" />
@@ -92,14 +91,11 @@
         android:id="@+id/img_gps"
         android:layout_width="44dp"
         android:layout_height="53dp"
-        android:layout_below="@id/edit"
-        android:layout_alignStart="@+id/edit"
-        android:layout_marginStart="297dp"
-        android:layout_marginTop="289dp"
+        android:layout_alignBottom="@+id/edit"
+        android:layout_alignParentEnd="true"
         android:onClick="gpsposition"
         app:srcCompat="@drawable/ic_gps_fixed_black_24dp"
         tools:layout_editor_absoluteX="351dp"
-        tools:layout_editor_absoluteY="150dp"
-        />
+        tools:layout_editor_absoluteY="150dp" />
 
 </RelativeLayout>

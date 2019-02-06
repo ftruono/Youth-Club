@@ -71,23 +71,14 @@ public class EditRecensione extends AppCompatActivity {
 
         } else {
             //URL ulr=new URL("http://10.0.0.2:8080/index.jsp?review=add&account="+id+"&testo="+testoR+"&titolo="+titolo+"&votoServizio="+votoS+"&votoQP="+votoQP+"&votoCibo="+votoC+"&idLocale="+localeID);
-            int contatore=0;
-            ClientRequest clientRequest=new ClientRequest(t);
-             contatore=clientRequest.addReview(t.getImei(),testoR.getText().toString(),titolo.getText().toString(),votoSi,votoQPi,votoCi,localeID);
-               //int codeResponse=clientRequest.addReview();
-                //TODO controllo del codeResponse . vedere ODD
 
-            while (contatore==0){
-                contatore=clientRequest.addReview(t.getImei(),testoR.getText().toString(),titolo.getText().toString(),votoSi,votoQPi,votoCi,localeID);
-
-            }
+            ClientRequest clientRequest = new ClientRequest(t);
+            clientRequest.addReview(testoR.getText().toString(), titolo.getText().toString(), votoSi, votoQPi, votoCi, localeID);
 
 
-
-
+        }
             Toast.makeText(this, "recensione iniviata", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(i);
+
         }
     }
-}
+

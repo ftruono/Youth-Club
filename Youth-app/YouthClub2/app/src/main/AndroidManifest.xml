@@ -40,7 +40,7 @@
         <activity android:name=".Ricerca_localita" />
         <activity android:name=".Ricerca_nome" />
         <activity android:name=".Mappa_lista" />
-        <activity android:name=".profile" />
+        <activity android:name="it.youthclub.activity.ProfileActivity" />
         <activity android:name=".Splash" />
         <activity android:name=".InfoLocale" />
     </application>

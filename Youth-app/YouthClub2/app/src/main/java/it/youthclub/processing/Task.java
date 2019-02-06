@@ -100,7 +100,7 @@ public class Task extends AsyncTask<URL,Integer, JSONObject> {
 
     @Override
     protected void onPostExecute(JSONObject jsonObject) {
-        Log.d("thread","sono terminato");
-        super.onPostExecute(jsonObject);
+        Log.d("YTH","sono terminato");
+
     }
 }
