@@ -1,11 +1,13 @@
 package it.youthclub.beans;
 
+import android.support.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Locale implements Serializable {
+public class Locale implements Serializable,Comparable<Locale> {
     private int id;
     private int idPlace;
     private String nome;
@@ -17,7 +19,7 @@ public class Locale implements Serializable {
     private String fonte;
     private List<Recensione> recensioni;
     private String id_api;
-
+    private static final float RANGE=0.001f;
 
 
 
@@ -139,4 +141,45 @@ public class Locale implements Serializable {
     //TODO eqauls toString clone
 
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null) return false;
+        if(Locale.class.equals(obj.getClass())){
+            Locale temp=(Locale)obj;
+            float lng_max=temp.getLongitudine()+RANGE;
+            float lng_min=temp.getLongitudine()+RANGE;
+            float max_lat,min_lat;
+            if(temp.getLatitudine()>0){
+                max_lat=lat+RANGE;
+                min_lat=lat-RANGE;
+
+            }else {
+                max_lat=lat-RANGE;
+                min_lat=lat+RANGE;
+            }
+
+            if(temp.getNome().contentEquals(getNome()) && (getLatitudine()<=max_lat  && getLatitudine()>=min_lat) &&
+                    (getLongitudine()>=lng_min && getLongitudine()<=lng_max))
+                return true;
+
+
+            }
+
+        return false;
+        }
+
+
+    @Override
+    public int compareTo(@NonNull Locale o) {
+        //se teneva più campi 0= uguale , 1 di più o , -1 di più this
+        if(getVia()!=null && getVia().length()<o.getVia().length()){
+            return 1;
+
+
+        }
+
+
+        return 0;
+    }
 }
+
