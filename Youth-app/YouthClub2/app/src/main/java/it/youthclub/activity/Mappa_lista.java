@@ -113,7 +113,7 @@ public class Mappa_lista extends AppCompatActivity implements OnMapReadyCallback
             clickCount = clickCount + 1;
             marker.setTag(clickCount);
 
-            
+
         }
 
         // Return false to indicate that we have not consumed the event and that we wish
