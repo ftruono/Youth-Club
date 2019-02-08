@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".InfoLocale">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="195dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
+        tools:context="com.example.mapwithmarker.MapsMarkerActivity" />
+
+    <RelativeLayout
+        android:id="@+id/dati"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/map"
+        android:layout_marginLeft="5dp">
+        <TextView
+            android:id="@+id/mediavoti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ha ottenuto una media di recensioni:"/>
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mediavoti"
+            android:numStars="5"/>
+        <TextView
+            android:id="@+id/TextNonVoto1"
+            android:layout_below="@+id/mediavoti"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ancora non ha ricevuto recensioni"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:visibility="invisible"/>
+        <TextView
+            android:id="@+id/nome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ratingBar"/>
+        <TextView
+            android:id="@+id/via"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/nome"/>
+        <TextView
+            android:id="@+id/numeroTelefono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/via"/>
+
+
+            <Button
+                android:id="@+id/writereview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="scrivi una recensione"
+                android:layout_below="@+id/numeroTelefono"/>
+
+
+
+
+        <ListView
+            android:id="@+id/lista_recensione"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/writereview"></ListView>
+        <TextView
+            android:id="@+id/TextNonVoto2"
+            android:layout_below="@+id/writereview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ancora non ha ricevuto recensioni"
+            android:textStyle="bold"
+            android:textSize="15dp"
+            android:visibility="invisible"/>
+
+
+    </RelativeLayout>
+</RelativeLayout>

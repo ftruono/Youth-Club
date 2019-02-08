@@ -1,0 +1,1 @@
+Questa cartella conterrà il progetto front , cioè l'applicativo android.
