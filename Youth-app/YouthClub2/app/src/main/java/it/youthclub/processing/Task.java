@@ -81,14 +81,19 @@ public class Task extends AsyncTask<URL,Integer, JSONObject> {
 
 
             case AUTENTICAZIONE:
-                Map<String, List<String>> headerFields = connection.getHeaderFields(); //recupero i campi
-                if(headerFields!=null) {
-                    String session = headerFields.get("Set-Cookie").get(0); //prendo solo i cookies
-                    String js=session.substring(0,session.indexOf(";")+1);
-                    user.setJSESSION(js);
-                    connection.disconnect();
+                try {
+                    Map<String, List<String>> headerFields = connection.getHeaderFields(); //recupero i campi
+                    if(headerFields!=null) {
+                        String session = headerFields.get("Set-Cookie").get(0); //prendo solo i cookies
+                        String js=session.substring(0,session.indexOf(";")+1);
+                        user.setJSESSION(js);
+                        connection.disconnect();
+                        return null;
+                    }
+                }catch(NullPointerException ex){
                     return null;
                 }
+
 
 
         }

@@ -195,6 +195,7 @@ public class ClientRequest  {
                 rec.setVotoQP(Integer.parseInt(recJSON.getString("votoQP")));
                 rec.setVotoCibo(Integer.parseInt(recJSON.getString("votoCibo")));
                 rec.setVotoServizio(Integer.parseInt(recJSON.getString("votoService")));
+
                 list.add(rec);
 
             }
@@ -224,7 +225,7 @@ public class ClientRequest  {
     private List<Locale> decodeJSON(JSONObject obj) {
         try {
             //TODO: controlli duplicati e errore di DecodeException (sfrutta throws)!
-            List<Locale> loc=new LinkedList<>();
+            List<Locale> loc=new ArrayList<>();
             JSONArray results=obj.getJSONArray("results");
 
             for(int i=0;i<results.length();++i) {
@@ -255,7 +256,16 @@ public class ClientRequest  {
                         r.setVotoCibo(Integer.parseInt(recensione.getString("votoCibo")));
                         l.addReview(r);
                     }
-                loc.add(l);
+                int index=loc.indexOf(l);
+                if(index>-1){
+                   if(loc.get(index).compareTo(l)<0){
+                       loc.remove(index);
+                       loc.add(l);
+                   }
+                }else
+                    loc.add(l);
+
+
             }
             return loc;
         } catch (JSONException e) {

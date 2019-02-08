@@ -19,7 +19,7 @@ public class Locale implements Serializable,Comparable<Locale> {
     private String fonte;
     private List<Recensione> recensioni;
     private String id_api;
-    private static final float RANGE=0.001f;
+    private static final float RANGE=0.002f;
 
 
 
@@ -147,15 +147,15 @@ public class Locale implements Serializable,Comparable<Locale> {
         if(Locale.class.equals(obj.getClass())){
             Locale temp=(Locale)obj;
             float lng_max=temp.getLongitudine()+RANGE;
-            float lng_min=temp.getLongitudine()+RANGE;
+            float lng_min=temp.getLongitudine()-RANGE;
             float max_lat,min_lat;
             if(temp.getLatitudine()>0){
-                max_lat=lat+RANGE;
-                min_lat=lat-RANGE;
+                max_lat=temp.getLatitudine()+RANGE;
+                min_lat=temp.getLatitudine()-RANGE;
 
             }else {
-                max_lat=lat-RANGE;
-                min_lat=lat+RANGE;
+                max_lat=temp.getLatitudine()-RANGE;
+                min_lat=temp.getLatitudine()+RANGE;
             }
 
             if(temp.getNome().contentEquals(getNome()) && (getLatitudine()<=max_lat  && getLatitudine()>=min_lat) &&
@@ -171,15 +171,22 @@ public class Locale implements Serializable,Comparable<Locale> {
 
     @Override
     public int compareTo(@NonNull Locale o) {
-        //se teneva più campi 0= uguale , 1 di più o , -1 di più this
-        if(getVia()!=null && getVia().length()<o.getVia().length()){
-            return 1;
+        int sup=0;
+        //se teneva più campi 0= uguale , -1 di meno di o , +1 più di o
+        if(getVia()!=null && o.getVia()!=null){
+           if(getVia().length()>o.getVia().length())
+               ++sup;
+           else
+               --sup;
 
-
-        }
-
-
-        return 0;
+        }else
+            --sup;
+        //si da più importanza al cellulare nella comparazione.
+        if(getPhone()!=null && !getPhone().equals(""))
+            sup+=2;
+        if(o.getPhone()!=null && !o.getPhone().equals(""))
+            sup-=2;
+        return sup;
     }
 }
 
